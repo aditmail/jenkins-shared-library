@@ -32,8 +32,7 @@ pipeline {
                     isEmailValid = utils utilities: 'validateEmail', params: emailto
 
                     if (isEmailValid) {
-                        outputMessage outputType: 'print', message: "Seems Like you Haven\'t Set Email Yet, Requesting New Input.."
-                        //outputMessage "Seems Like you Haven\'t Set Email Yet, Requesting New Input.."
+                        outputMessage "Seems Like you Haven\'t Set Email Yet, Requesting New Input.."
                         emailAddress = utils utilities: 'inputEmail'
                     } else {
                         isPatternValid = utils utilities: 'emailPattern', params: emailto
@@ -41,7 +40,7 @@ pipeline {
                         if (isPatternValid) {
                             emailAddress = emailto
                         } else {
-                            outputMessage outputType: 'print', message: "Seems Like you Haven\'t Set Email Yet, Requesting New Input.."
+                            outputMessage "Seems Like you Set Invalid Email, Requesting New Input.."
                             emailAddress = utils utilities: 'inputEmail'
                         }
                     }
@@ -61,8 +60,7 @@ pipeline {
         stage('Build-Stage') {
             steps {
                 script {
-                    //echo "Clone Repository from Github at ${utilsScript.dateTime()}"
-                    echo "Clone Repository from Github"
+                    outputMessage outputType: 'startStage', level: 'build'
                 }
 
                 git(
@@ -75,20 +73,21 @@ pipeline {
             }
         }
 
-//        stage('Unit-Test Stage') {
-//            steps {
-//                script {
-//                    echo "Unit Test Running at ${utilsScript.dateTime()}"
-//                }
-//                bat "gradle clean build check test jar"
-//            }
-//        }
+        stage('Unit-Test Stage') {
+            steps {
+                script {
+                    outputMessage outputType: 'startStage', level: 'unit-test'
+                }
+
+                bat "gradle clean build check test jar"
+            }
+        }
     }
 
     post {
         always {
             script {
-                echo "Builds are ${currentBuild.currentResult}" //at ${utilsScript.dateTime()}"
+                outputMessage outputType: 'startStage', level: 'post-stage', params: currentBuild.currentResult
             }
         }
 

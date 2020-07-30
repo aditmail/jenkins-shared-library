@@ -1,17 +1,29 @@
 import main.groovy.example.Constant
 
+def call(String message) {
+    echo message
+}
+
 def call(Map config = [:]) {
-    def outputType = config.outputType
     def dateTime = new Date().format('dd/MM/yyyy HH:mm:ss')
 
-    if (outputType == "print") {
-        echo config.message
-    } else if (outputType == "start stage") {
+    def outputType = config.outputType
+    if (outputType == "startStage") {
         switch (config.level) {
             case 'init':
-                echo "Initialize Stage Running at $dateTime"
+                echo "$Constant.INIT_STAGE Stage Running at $dateTime"
+                break
+            case 'build':
+                echo "$Constant.BUILD_STAGE Stage Running at $dateTime"
+                break
+            case 'unit-test':
+                echo "$Constant.UNIT_TEST_STAGE Stage Running at $dateTime"
+                break
+            case 'post-stage':
+                echo "$Constant.POST_STAGE ${(config.params != null ? "with ${config.params} Status" : "")}"
                 break
 
+            default: break
 
         }
     } else if (outputType == "build") {

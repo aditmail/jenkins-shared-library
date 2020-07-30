@@ -17,6 +17,11 @@ class Constant {
     static final String INSERT_BTN = "Insert"
     static final String EMAIL_EXAMPLE = "example@email.com"
 
+    static final String INIT_STAGE = "Initialize"
+    static final String BUILD_STAGE = "Build"
+    static final String UNIT_TEST_STAGE = "Unit-Test"
+    static final String POST_STAGE = "Build Job Done with"
+
     /**
      * Pattern -- Regex
      */
