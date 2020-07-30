@@ -34,13 +34,13 @@ def call() {
                         //utilsScript = load("${env.WORKSPACE}/src/main/groovy/pipeline/utils.groovy")
                         outputMessage "Initialize Stage Running ${utils utilities: 'dateTime'}"
 
-                        if (utils utilities: 'validateEmail', params: emailto) {
-                        //if (utilsScript.validateEmail(emailto)) {
+                        if (utils "${[utilities: 'validateEmail', params: emailto]}") {
+                            //if (utilsScript.validateEmail(emailto)) {
                             outputMessage "Seems Like you Haven\'t Set Email Yet, Requesting New Input.."
                             emailAddress = utils utilities: 'inputEmail'
                             //emailAddress = utilsScript.inputEmail()
                         } else {
-                            if (utils utilities: 'validateEmail', params: emailto) {
+                            if (utils "${[utilities: 'validateEmail', params: emailto]}") {
                                 //emailAddress = emailto
                             } else {
                                 outputMessage "Seems Like you Set Email Invalid Email, Requesting New Input.."
@@ -139,4 +139,5 @@ def call() {
 //        }
         }
     }
+
 }
