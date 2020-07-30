@@ -1,6 +1,7 @@
 import main.groovy.example.Constant
 
-def call(String outputType, Map config = [:]) {
+def call(Map config = [:]) {
+    def outputType = config.outputType
     def dateTime = new Date().format('dd/MM/yyyy HH:mm:ss')
 
     if (outputType == "print") {

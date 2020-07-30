@@ -28,11 +28,11 @@ pipeline {
 
             steps {
                 script {
-                    outputMessage 'startStage', level: 'init'
+                    outputMessage outputType: 'startStage', level: 'init'
                     isEmailValid = utils utilities: 'validateEmail', params: emailto
 
                     if (isEmailValid) {
-                        outputMessage 'print', message: "Seems Like you Haven\'t Set Email Yet, Requesting New Input.."
+                        outputMessage outputType: 'print', message: "Seems Like you Haven\'t Set Email Yet, Requesting New Input.."
                         //outputMessage "Seems Like you Haven\'t Set Email Yet, Requesting New Input.."
                         emailAddress = utils utilities: 'inputEmail'
                     } else {
@@ -41,7 +41,7 @@ pipeline {
                         if (isPatternValid) {
                             emailAddress = emailto
                         } else {
-                            outputMessage 'print', message: "Seems Like you Haven\'t Set Email Yet, Requesting New Input.."
+                            outputMessage outputType: 'print', message: "Seems Like you Haven\'t Set Email Yet, Requesting New Input.."
                             emailAddress = utils utilities: 'inputEmail'
                         }
                     }
