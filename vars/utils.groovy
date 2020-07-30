@@ -10,7 +10,7 @@ def call(Map config = [:]) {
             break
 
         case 'inputEmail':
-            input(
+            return input(
                     message: "${Constant.INPUT_EMAIL_MSG}",
                     ok: "$Constant.INSERT_BTN",
                     parameters: [
