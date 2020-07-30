@@ -24,5 +24,7 @@ pipeline {
         buildTag = "${env.BUILD_TAG}"
     }
 
-    JenkinsJob.call()
+    stages {
+        JenkinsJob.call()
+    }
 }
