@@ -1,5 +1,5 @@
 def call() {
-    stage('Initialize-Stage') {
+    //stage('Initialize-Stage') {
         environment {
             def emailAddress = null
             def isEmailValid = false
@@ -36,7 +36,7 @@ def call() {
             bat "java -version"
             bat "gradle -v"
         }
-    }
+    //}
 
     /*stage('Build-Stage') {
         steps {
