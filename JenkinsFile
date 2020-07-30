@@ -25,6 +25,8 @@ pipeline {
     }
 
     stages {
-        JenkinsJob.call()
+        stage('test') {
+            JenkinsJob.call()
+        }
     }
 }

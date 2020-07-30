@@ -38,7 +38,7 @@ def call() {
         }
     }
 
-    stage('Build-Stage') {
+    /*stage('Build-Stage') {
         steps {
             script {
                 outputMessage outputType: 'startStage', level: 'build'
@@ -62,7 +62,7 @@ def call() {
 
             bat "gradle clean build check test jar"
         }
-    }
+    }*/
 }
 
 post {
