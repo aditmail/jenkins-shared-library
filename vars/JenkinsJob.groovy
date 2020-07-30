@@ -16,40 +16,41 @@ pipeline {
 
         buildID = "${env.BUILD_ID}"
         buildTag = "${env.BUILD_TAG}"
-
-        //Define Variable for Utils Script Class
-        //def utilsScript = "$moduleScript.utils"
     }
 
     stages {
         stage('Initialize-Stage') {
             environment {
                 def emailAddress = null
+                def isEmailValid = false
+                def isPatternValid = false
             }
 
             steps {
                 script {
-                    //utilsScript = load("${env.WORKSPACE}/src/main/groovy/pipeline/utils.groovy")
-                    outputMessage "Initialize Stage Running ${utils utilities: 'dateTime'}"
+                    outputMessage 'startStage', level: 'init'
+                    isEmailValid = utils utilities: 'validateEmail', params: emailto
 
-                    /*if (utils "${[utilities: 'validateEmail', params: emailto]}") {
-                        //if (utilsScript.validateEmail(emailto)) {
-                        outputMessage "Seems Like you Haven\'t Set Email Yet, Requesting New Input.."
+                    if (isEmailValid) {
+                        outputMessage 'print', message: "Seems Like you Haven\'t Set Email Yet, Requesting New Input.."
+                        //outputMessage "Seems Like you Haven\'t Set Email Yet, Requesting New Input.."
                         emailAddress = utils utilities: 'inputEmail'
-                        //emailAddress = utilsScript.inputEmail()
                     } else {
-                        if (utils "${[utilities: 'validateEmail', params: emailto]}") {
-                            //emailAddress = emailto
+                        isPatternValid = utils utilities: 'emailPattern', params: emailto
+
+                        if (isPatternValid) {
+                            emailAddress = emailto
                         } else {
-                            outputMessage "Seems Like you Set Email Invalid Email, Requesting New Input.."
-                            //emailAddress = inputEmail()
+                            outputMessage 'print', message: "Seems Like you Haven\'t Set Email Yet, Requesting New Input.."
+                            emailAddress = utils utilities: 'inputEmail'
                         }
-                    }*/
+                    }
 
                     //Checking again if email valid or not
-                    /*if (utilsScript.validateEmail(emailAddress)) {
-                    utilsScript.abortBuild(emailAddress)
-                }*/
+                    isEmailValid = utils utilities: 'validateEmail', params: emailAddress
+                    if (isEmailValid) {
+                        outputMessage status: 'aborted', params: emailAddress
+                    }
                 }
 
                 bat "java -version"

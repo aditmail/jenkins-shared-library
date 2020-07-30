@@ -1,5 +1,7 @@
 import main.groovy.example.Constant
 
+import java.util.regex.Pattern
+
 def call(Map config = [:]) {
     switch (config.utilities) {
         case 'dateTime':
@@ -26,6 +28,14 @@ def call(Map config = [:]) {
             /* Check Email Validation */
             def emailAddress = config.params
             return (emailAddress == null || emailAddress == "" || emailAddress == "example@email.com")
+            break
+
+        case 'emailPattern':
+            String email = config.params
+            String regex = config.EMAIL_REGEX
+
+            Pattern pattern = Pattern.compile(regex)
+            return pattern.matcher(email).matches()
             break
 
         default: break
