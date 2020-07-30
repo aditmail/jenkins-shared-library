@@ -1,6 +1,6 @@
 import main.groovy.example.Constant
 
-static def call(Map config = [:]) {
+def call(Map config = [:]) {
     switch (config.utilities) {
         case 'dateTime':
             dateTime()
