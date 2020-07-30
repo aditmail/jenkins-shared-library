@@ -1,23 +1,4 @@
-pipeline {
-    agent any
-    tools {
-        jdk 'Jdk.1.8'
-        gradle 'gradle.6.6'
-    }
-
-    options {
-        timestamps()
-    }
-
-    environment {
-        jobName = "${env.JOB_NAME}"
-        buildURL = "${env.BUILD_URL}"
-        buildNumber = "${env.BUILD_NUMBER}"
-
-        buildID = "${env.BUILD_ID}"
-        buildTag = "${env.BUILD_TAG}"
-    }
-
+def call() {
     stages {
         stage('Initialize-Stage') {
             environment {
