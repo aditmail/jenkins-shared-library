@@ -93,12 +93,6 @@ pipeline {
         }
 
         success {
-            mail([
-                    body   : """Test Successfully Build at this:\n${buildURL}\n\nBuild Number\t\t: ${buildNumber}\nBuild Tag\t\t: ${buildTag}""",
-                    from   : "aditya@jenkins.com",
-                    subject: "Success in Build Jenkins:\n${jobName} #${buildNumber}",
-                    to     : "${emailAddress}"
-            ])
             script {
                 sendEmail(
                         status: 'Success',

@@ -20,7 +20,7 @@ def call(Map config = [:]) {
                 echo "$Constant.UNIT_TEST_STAGE Stage Running at $dateTime"
                 break
             case 'post-stage':
-                echo "$Constant.POST_STAGE ${(config.params != null ? "with Status: ${config.params}" : "")}"
+                echo "$Constant.POST_STAGE ${(config.params != null ? " Status: ${config.params}" : "")}"
                 break
 
             default: break
