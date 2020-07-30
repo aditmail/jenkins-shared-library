@@ -10,11 +10,11 @@ class Constant {
     static final String DESCRIPTION_EMAIL_MSG = """<p style="color:red;">*Required</p><h5>Insert <b style="color:blue">Email Address</b> to Send Notification Email</h5>"""
     static final String BUILD_ABORTED_MESSAGE = "Build Job Aborted"
 
-    static final String BODY_EMAIL_SUCCESS_MSG = "Test Successfully Build at this:\n"
-    static final String SUBJECT_EMAIL_SUCCESS_MSG = "Success in Build Jenkins:\n"
+    static final String BODY_EMAIL_SUCCESS_MSG = "Test Successfully Build at thisss:\n"
+    static final String SUBJECT_EMAIL_SUCCESS_MSG = "Success in Build Jenkins: :D"
 
     static final String BODY_EMAIL_FAILED_MSG = "Test Failed Occurs\nCheck Console Output at below to see Detail\n"
-    static final String SUBJECT_EMAIL_FAILED_MSG = "Failure in Build Jenkins:\n"
+    static final String SUBJECT_EMAIL_FAILED_MSG = "Failure in Build Jenkins: :["
 
     /**
      * Simple Task
