@@ -8,8 +8,13 @@ class Constant {
     static final String EMAIL_MSG = "Sending Email"
     static final String INPUT_EMAIL_MSG = "Seems like you haven\'t input Email before.. Please set first!"
     static final String DESCRIPTION_EMAIL_MSG = """<p style="color:red;">*Required</p><h5>Insert <b style="color:blue">Email Address</b> to Send Notification Email</h5>"""
-
     static final String BUILD_ABORTED_MESSAGE = "Build Job Aborted"
+
+    static final String BODY_EMAIL_SUCCESS_MSG = "Test Successfully Build at this:\n"
+    static final String SUBJECT_EMAIL_SUCCESS_MSG = "Success in Build Jenkins:\n"
+
+    static final String BODY_EMAIL_FAILED_MSG = "Test Failed Occurs\nCheck Console Output at below to see Detail\n"
+    static final String SUBJECT_EMAIL_FAILED_MSG = "Failure in Build Jenkins:\n"
 
     /**
      * Simple Task
@@ -21,6 +26,8 @@ class Constant {
     static final String BUILD_STAGE = "Build"
     static final String UNIT_TEST_STAGE = "Unit-Test"
     static final String POST_STAGE = "Build Job Done with"
+
+
 
     /**
      * Pattern -- Regex

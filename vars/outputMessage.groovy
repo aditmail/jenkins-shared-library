@@ -29,9 +29,7 @@ def call(Map config = [:]) {
     } else if (outputType == "build") {
         switch (config.status) {
             case 'aborted':
-                currentBuild.result = 'ABORTED'
                 def condition = (config.params != null ? " - Because: ${config.params}" : "")
-
                 echo "${Constant.BUILD_ABORTED_MESSAGE} at $dateTime $condition}"
                 break
 

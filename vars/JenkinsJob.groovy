@@ -45,14 +45,12 @@ pipeline {
                         }
                     }
 
-                    outputMessage "email Are: $emailAddress"
                     //Checking again if email valid or not
                     isEmailValid = utils utilities: 'validateEmail', params: emailAddress
                     if (isEmailValid) {
-                        outputMessage status: 'aborted', params: emailAddress
+                        currentBuild.result = 'ABORTED'
+                        outputMessage outputType: 'build', status: 'aborted', params: emailAddress
                     }
-
-                    outputMessage "email Are: $emailAddress"
                 }
 
                 bat "java -version"
@@ -94,39 +92,40 @@ pipeline {
             }
         }
 
-//        success {
-//            mail([
-//                    body   : """Test Successfully Build at this:\n${buildURL}\n\nBuild Number\t\t: ${buildNumber}\nBuild Tag\t\t: ${buildTag}""",
-//                    from   : "aditya@jenkins.com",
-//                    subject: "Success in Build Jenkins:\n${jobName} #${buildNumber}",
-//                    to     : "${emailAddress}"
-//            ])
-//            script {
-//                if (params.JUnit) {
-//                    echo "Generating JUnit Reports"
-//                    junit testResults: "**/build/test-results/test/TEST-*.xml"
-//                }
-//
-//                if (params.Checkstyle) {
-//                    echo "Generating Checkstyle Reports"
-//                    //checkstyle pattern: "**/build/reports/checkstyle/*.xml"
-//                    recordIssues(
-//                            tools: [
-//                                    checkStyle(pattern: '**/build/reports/checkstyle/*.xml')
-//                            ]
-//                    )
-//                }
-//            }
-//
-//            /*publishHTML target: [
-//                    allowMissing         : false,
-//                    alwaysLinkToLastBuild: false,
-//                    keepAll              : true,
-//                    reportDir            : "coverage",
-//                    reportFiles          : 'index.html',
-//                    reportName           : 'JUnit-Reports'
-//            ]*/
-//        }
+        success {
+            mail([
+                    body   : """Test Successfully Build at this:\n${buildURL}\n\nBuild Number\t\t: ${buildNumber}\nBuild Tag\t\t: ${buildTag}""",
+                    from   : "aditya@jenkins.com",
+                    subject: "Success in Build Jenkins:\n${jobName} #${buildNumber}",
+                    to     : "${emailAddress}"
+            ])
+            script {
+                sendEmail buildUrl: buildURL, buildNumber: buildNumber, buildTag: buildTag, jobName: jobName, emailTo: emailAddress
+
+                if (params.JUnit) {
+                    outputMessage "Generating JUnit Reports"
+                    junit testResults: "**/build/test-results/test/TEST-*.xml"
+                }
+
+                if (params.Checkstyle) {
+                    outputMessage "Generating Checkstyle Reports"
+                    recordIssues(
+                            tools: [
+                                    checkStyle(pattern: '**/build/reports/checkstyle/*.xml')
+                            ]
+                    )
+                }
+            }
+
+            /*publishHTML target: [
+                    allowMissing         : false,
+                    alwaysLinkToLastBuild: false,
+                    keepAll              : true,
+                    reportDir            : "coverage",
+                    reportFiles          : 'index.html',
+                    reportName           : 'JUnit-Reports'
+            ]*/
+        }
 
 //        failure {
 //            mail(
