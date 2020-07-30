@@ -35,7 +35,7 @@ pipeline {
                     outputMessage outputType: 'startStage', level: 'init'
                     isEmailValid = utils utilities: 'validateEmail', params: emailto
 
-                    if (isEmailValid) {
+                    if (utils.validateEmail(emailto)) {
                         outputMessage "Seems Like you Haven\'t Set Email Yet, Requesting New Input.."
                         emailAddress = utils utilities: 'inputEmail'
                     } else {
@@ -51,7 +51,7 @@ pipeline {
 
                     //Checking again if email valid or not
                     isEmailValid = utils utilities: 'validateEmail', params: emailAddress
-                    if (isEmailValid) {
+                    if (utils.validateEmail(emailto)) {
                         currentBuild.result = 'ABORTED'
                         outputMessage outputType: 'build', status: 'aborted', params: emailAddress
                     }

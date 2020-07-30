@@ -43,13 +43,13 @@ def call(Map config = [:]) {
 }
 
 /** Get TimeStamp **/
-String dateTime() {
+static String dateTime() {
     return new Date().format('dd/MM/yyyy HH:mm:ss')
 }
 
 /** Set Email Address **/
 def inputEmail() {
-    input(
+    return input(
             message: "${Constant.INPUT_EMAIL_MSG}",
             ok: "$Constant.INSERT_BTN",
             parameters: [
