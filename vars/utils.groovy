@@ -32,7 +32,7 @@ def call(Map config = [:]) {
 
         case 'emailPattern':
             String email = config.params
-            String regex = config.EMAIL_REGEX
+            String regex = Constant.EMAIL_REGEX
 
             Pattern pattern = Pattern.compile(regex)
             return pattern.matcher(email).matches()

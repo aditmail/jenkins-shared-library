@@ -45,11 +45,14 @@ pipeline {
                         }
                     }
 
+                    outputMessage "email Are: $emailAddress"
                     //Checking again if email valid or not
                     isEmailValid = utils utilities: 'validateEmail', params: emailAddress
                     if (isEmailValid) {
                         outputMessage status: 'aborted', params: emailAddress
                     }
+
+                    outputMessage "email Are: $emailAddress"
                 }
 
                 bat "java -version"
