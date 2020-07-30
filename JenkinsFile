@@ -2,7 +2,7 @@
 /*libraries {
     lib('jenkins-shared-library')
 }*/
-@Library("jenkis-shared-library") _
+@Library("jenkins-shared-library") _
 
 pipeline {
     agent any
