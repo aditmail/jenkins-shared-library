@@ -24,7 +24,7 @@ pipeline {
         buildTag = "${env.BUILD_TAG}"
 
         //Define Variable for Utils Script Class
-        def utilsScript = "$moduleScript.utils"
+        //def utilsScript = "$moduleScript.utils"
     }
 
     stages {
@@ -35,25 +35,26 @@ pipeline {
 
             steps {
                 script {
-                    utilsScript = load("${env.WORKSPACE}/src/main/groovy/pipeline/utils.groovy")
-                    outputMessage "Initialize Stage Running at ${utilsScript.dateTime()}"
+                    //utilsScript = load("${env.WORKSPACE}/src/main/groovy/pipeline/utils.groovy")
+                    outputMessage "Initialize Stage Running"
+                    //outputMessage "Initialize Stage Running at ${utilsScript.dateTime()}"
 
                     if (utilsScript.validateEmail(emailto)) {
                         outputMessage "Seems Like you Haven\'t Set Email Yet, Requesting New Input.."
-                        emailAddress = utilsScript.inputEmail()
+                        //emailAddress = utilsScript.inputEmail()
                     } else {
                         if (utilsScript.emailPatterns(emailto)) {
-                            emailAddress = emailto
+                            //emailAddress = emailto
                         } else {
                             outputMessage "Seems Like you Set Email Invalid Email, Requesting New Input.."
-                            emailAddress = inputEmail()
+                            //emailAddress = inputEmail()
                         }
                     }
 
                     //Checking again if email valid or not
-                    if (utilsScript.validateEmail(emailAddress)) {
+                    /*if (utilsScript.validateEmail(emailAddress)) {
                         utilsScript.abortBuild(emailAddress)
-                    }
+                    }*/
                 }
 
                 bat "java -version"
@@ -64,7 +65,8 @@ pipeline {
         stage('Build-Stage') {
             steps {
                 script {
-                    echo "Clone Repository from Github at ${utilsScript.dateTime()}"
+                    //echo "Clone Repository from Github at ${utilsScript.dateTime()}"
+                    echo "Clone Repository from Github"
                 }
 
                 git(
@@ -90,7 +92,7 @@ pipeline {
     post {
         always {
             script {
-                echo "Builds are ${currentBuild.currentResult} at ${utilsScript.dateTime()}"
+                echo "Builds are ${currentBuild.currentResult}" //at ${utilsScript.dateTime()}"
             }
         }
 
