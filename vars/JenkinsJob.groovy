@@ -1,79 +1,79 @@
 def call() {
 
-    pipeline {
-        agent any
-        tools {
-            jdk 'Jdk.1.8'
-            gradle 'gradle.6.6'
-        }
+    //pipeline {
+    agent any
+    tools {
+        jdk 'Jdk.1.8'
+        gradle 'gradle.6.6'
+    }
 
-        options {
-            timestamps()
-        }
+    options {
+        timestamps()
+    }
 
-        environment {
-            jobName = "${env.JOB_NAME}"
-            buildURL = "${env.BUILD_URL}"
-            buildNumber = "${env.BUILD_NUMBER}"
+    environment {
+        jobName = "${env.JOB_NAME}"
+        buildURL = "${env.BUILD_URL}"
+        buildNumber = "${env.BUILD_NUMBER}"
 
-            buildID = "${env.BUILD_ID}"
-            buildTag = "${env.BUILD_TAG}"
+        buildID = "${env.BUILD_ID}"
+        buildTag = "${env.BUILD_TAG}"
 
-            //Define Variable for Utils Script Class
-            //def utilsScript = "$moduleScript.utils"
-        }
+        //Define Variable for Utils Script Class
+        //def utilsScript = "$moduleScript.utils"
+    }
 
-        stages {
-            stage('Initialize-Stage') {
-                environment {
-                    def emailAddress = null
-                }
+    stages {
+        stage('Initialize-Stage') {
+            environment {
+                def emailAddress = null
+            }
 
-                steps {
-                    script {
-                        //utilsScript = load("${env.WORKSPACE}/src/main/groovy/pipeline/utils.groovy")
-                        outputMessage "Initialize Stage Running"
-                        //outputMessage "Initialize Stage Running at ${utilsScript.dateTime()}"
+            steps {
+                script {
+                    //utilsScript = load("${env.WORKSPACE}/src/main/groovy/pipeline/utils.groovy")
+                    outputMessage "Initialize Stage Running"
+                    //outputMessage "Initialize Stage Running at ${utilsScript.dateTime()}"
 
-                        if (utilsScript.validateEmail(emailto)) {
-                            outputMessage "Seems Like you Haven\'t Set Email Yet, Requesting New Input.."
-                            //emailAddress = utilsScript.inputEmail()
+                    if (utilsScript.validateEmail(emailto)) {
+                        outputMessage "Seems Like you Haven\'t Set Email Yet, Requesting New Input.."
+                        //emailAddress = utilsScript.inputEmail()
+                    } else {
+                        if (utilsScript.emailPatterns(emailto)) {
+                            //emailAddress = emailto
                         } else {
-                            if (utilsScript.emailPatterns(emailto)) {
-                                //emailAddress = emailto
-                            } else {
-                                outputMessage "Seems Like you Set Email Invalid Email, Requesting New Input.."
-                                //emailAddress = inputEmail()
-                            }
+                            outputMessage "Seems Like you Set Email Invalid Email, Requesting New Input.."
+                            //emailAddress = inputEmail()
                         }
-
-                        //Checking again if email valid or not
-                        /*if (utilsScript.validateEmail(emailAddress)) {
-                        utilsScript.abortBuild(emailAddress)
-                    }*/
                     }
 
-                    bat "java -version"
-                    bat "gradle -v"
+                    //Checking again if email valid or not
+                    /*if (utilsScript.validateEmail(emailAddress)) {
+                    utilsScript.abortBuild(emailAddress)
+                }*/
                 }
+
+                bat "java -version"
+                bat "gradle -v"
             }
+        }
 
-            stage('Build-Stage') {
-                steps {
-                    script {
-                        //echo "Clone Repository from Github at ${utilsScript.dateTime()}"
-                        echo "Clone Repository from Github"
-                    }
-
-                    git(
-                            [
-                                    branch       : "master",
-                                    credentialsId: "b5656ab7-b7ed-4c02-9833-9af6877e2b9e",
-                                    url          : "https://github.com/aditmail/gradleJavaProject.git"
-                            ]
-                    )
+        stage('Build-Stage') {
+            steps {
+                script {
+                    //echo "Clone Repository from Github at ${utilsScript.dateTime()}"
+                    echo "Clone Repository from Github"
                 }
+
+                git(
+                        [
+                                branch       : "master",
+                                credentialsId: "b5656ab7-b7ed-4c02-9833-9af6877e2b9e",
+                                url          : "https://github.com/aditmail/gradleJavaProject.git"
+                        ]
+                )
             }
+        }
 
 //        stage('Unit-Test Stage') {
 //            steps {
@@ -83,14 +83,14 @@ def call() {
 //                bat "gradle clean build check test jar"
 //            }
 //        }
-        }
+    }
 
-        post {
-            always {
-                script {
-                    echo "Builds are ${currentBuild.currentResult}" //at ${utilsScript.dateTime()}"
-                }
+    post {
+        always {
+            script {
+                echo "Builds are ${currentBuild.currentResult}" //at ${utilsScript.dateTime()}"
             }
+        }
 
 //        success {
 //            mail([
@@ -136,6 +136,6 @@ def call() {
 //                    ]
 //            )
 //        }
-        }
     }
 }
+//}
