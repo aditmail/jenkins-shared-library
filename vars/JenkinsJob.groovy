@@ -100,7 +100,14 @@ pipeline {
                     to     : "${emailAddress}"
             ])
             script {
-                sendEmail buildUrl: buildURL, buildNumber: buildNumber, buildTag: buildTag, jobName: jobName, emailTo: emailAddress
+                sendEmail(
+                        status: 'Success',
+                        buildUrl: buildURL,
+                        buildNumber: buildNumber,
+                        buildTag: buildTag,
+                        jobName: jobName,
+                        emailTo: emailAddress
+                )
 
                 if (params.JUnit) {
                     outputMessage "Generating JUnit Reports"
@@ -127,15 +134,17 @@ pipeline {
             ]*/
         }
 
-//        failure {
-//            mail(
-//                    [
-//                            body   : """Test Failed Occurs\nCheck Console Output at below to see Detail\n${buildURL}\n\nBuild ID\t\t: ${buildID}\nBuild Number \t\t: ${buildNumber}\nBuild Tag\t\t: ${buildTag}""",
-//                            from   : "aditya@jenkins.com",
-//                            subject: "Failure in Build Jenkins: ${jobName} #${buildNumber}",
-//                            to     : "${emailAddress}"
-//                    ]
-//            )
-//        }
+        failure {
+            script {
+                sendEmail(
+                        status: 'Failed',
+                        buildUrl: buildURL,
+                        buildNumber: buildNumber,
+                        buildTag: buildTag,
+                        jobName: jobName,
+                        emailTo: emailAddress
+                )
+            }
+        }
     }
 }

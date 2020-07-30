@@ -2,7 +2,6 @@ import main.groovy.example.Constant
 
 def call(Map config = [:]) {
     def status = config.status
-
     def bodyMessage = ""
     def subjectMessage = ""
 
