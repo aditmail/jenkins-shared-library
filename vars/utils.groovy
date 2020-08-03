@@ -64,6 +64,6 @@ def inputEmail() {
 }
 
 /** Check Email Validation **/
-static def Boolean validateEmail(emailAddress) {
+static def Boolean validateEmail(emailAddress = "") {
     return (emailAddress == null || emailAddress == "" || emailAddress == "example@email.com")
 }

@@ -22,6 +22,16 @@ pipeline {
     }
 
     stages {
+        stage('Git-Stage') {
+            steps {
+                vcCheckout(
+                        branch: 'master',
+                        url: 'https://github.com/aditmail/jenkins-shared-library',
+                        credentialsId: 'b5656ab7-b7ed-4c02-9833-9af6877e2b9e'
+                )
+            }
+        }
+
         stage('Initialize-Stage') {
             environment {
                 def emailAddress = null
