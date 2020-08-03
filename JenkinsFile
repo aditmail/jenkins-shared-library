@@ -42,7 +42,6 @@ pipeline {
 
             steps {
                 script {
-                    outputMessage utils.dateTime()
                     outputMessage outputType: 'startStage', level: 'init'
 
                     if (utils.validateEmail(emailto)) {
@@ -62,8 +61,8 @@ pipeline {
                         currentBuild.result = 'ABORTED'
                         outputMessage outputType: 'build', status: 'aborted', params: emailAddress
                     } else {
-                        bat "java -version"
-                        bat "gradle -v"
+                        cmdScript method: 'windows', command: 'java -version'
+                        cmdScript method: 'windows', command: 'gradle -v'
                     }
                 }
             }
@@ -91,7 +90,7 @@ pipeline {
                     outputMessage outputType: 'startStage', level: 'unit-test'
                 }
 
-                bat "gradle clean build check test jar"
+                cmdScript method: 'windows', command: 'gradle clean build check test jar'
             }
         }
     }
@@ -107,19 +106,17 @@ pipeline {
             script {
                 sendEmail(
                         status: 'Success',
-                        /*buildUrl: buildURL,
-                        buildNumber: buildNumber,
-                        buildTag: buildTag,
-                        jobName: jobName,*/
                         emailTo: emailAddress
                 )
 
                 if (params.JUnit) {
-                    utils.generateJUnit("**/build/test-results/test/TEST-*.xml")
+                    generateReports.getJUnit("**/build/test-results/test/TEST-*.xml")
+                    //utils.generateJUnit("**/build/test-results/test/TEST-*.xml")
                 }
 
                 if (params.Checkstyle) {
-                    utils.generateCheckstyle("**/build/reports/checkstyle/*.xml")
+                    generateReports.getCheckstyle("**/build/reports/checkstyle/*.xml")
+                    //utils.generateCheckstyle("**/build/reports/checkstyle/*.xml")
                 }
             }
 
@@ -137,10 +134,6 @@ pipeline {
             script {
                 sendEmail(
                         status: 'Failed',
-                        /*buildUrl: buildURL,
-                        buildNumber: buildNumber,
-                        buildTag: buildTag,
-                        jobName: jobName,*/
                         emailTo: emailAddress
                 )
             }

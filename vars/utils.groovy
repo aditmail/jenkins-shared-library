@@ -43,20 +43,20 @@ def call(Map config = [:]) {
 }
 
 /** Generate JUnit Test Result **/
-def generateJUnit(location = "") {
+/*def generateJUnit(location = "") {
     echo "$Constant.GENERATE_JUNIT_REPORT"
     junit testResults: location
-}
+}*/
 
 /** Generate Checkstyle Reports **/
-def generateCheckstyle(location = "") {
+/*def generateCheckstyle(location = "") {
     echo "$Constant.GENERATE_CHECKSTYLE_REPORT"
     recordIssues(
             tools: [
                     checkStyle(pattern: location)
             ]
     )
-}
+}*/
 
 /** Get TimeStamp **/
 static String dateTime() {

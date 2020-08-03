@@ -22,12 +22,5 @@ def call(Map config = [:]) {
                 subject: "${subjectMessage} ${env.JOB_NAME} #${env.BUILD_NUMBER}",
                 to     : "${config.emailTo}"
         ])
-
-        /*mail([
-                body   : "${bodyMessage} ${config.buildUrl}\n\nBuild Number\t\t: ${config.buildNumber}\nBuild Tag\t\t: ${config.buildTag}",
-                from   : "aditya@jenkins.com",
-                subject: "${subjectMessage} ${config.jobName} #${config.buildNumber}",
-                to     : "${config.emailTo}"
-        ])*/
     }
 }
