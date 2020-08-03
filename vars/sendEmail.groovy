@@ -17,10 +17,17 @@ def call(Map config = [:]) {
         }
 
         mail([
+                body   : "${bodyMessage} ${env.BUILD_URL}\n\nBuild Number\t\t: ${env.BUILD_NUMBER}\nBuild Tag\t\t: ${env.BUILD_TAG}",
+                from   : "aditya@jenkins.com",
+                subject: "${subjectMessage} ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                to     : "${config.emailTo}"
+        ])
+
+        /*mail([
                 body   : "${bodyMessage} ${config.buildUrl}\n\nBuild Number\t\t: ${config.buildNumber}\nBuild Tag\t\t: ${config.buildTag}",
                 from   : "aditya@jenkins.com",
                 subject: "${subjectMessage} ${config.jobName} #${config.buildNumber}",
                 to     : "${config.emailTo}"
-        ])
+        ])*/
     }
 }

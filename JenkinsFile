@@ -107,10 +107,10 @@ pipeline {
             script {
                 sendEmail(
                         status: 'Success',
-                        buildUrl: buildURL,
+                        /*buildUrl: buildURL,
                         buildNumber: buildNumber,
                         buildTag: buildTag,
-                        jobName: jobName,
+                        jobName: jobName,*/
                         emailTo: emailAddress
                 )
 
@@ -137,10 +137,10 @@ pipeline {
             script {
                 sendEmail(
                         status: 'Failed',
-                        buildUrl: buildURL,
+                        /*buildUrl: buildURL,
                         buildNumber: buildNumber,
                         buildTag: buildTag,
-                        jobName: jobName,
+                        jobName: jobName,*/
                         emailTo: emailAddress
                 )
             }
