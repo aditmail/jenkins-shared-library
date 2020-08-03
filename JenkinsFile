@@ -110,13 +110,11 @@ pipeline {
                 )
 
                 if (params.JUnit) {
-                    generateReports.getJUnit("**/build/test-results/test/TEST-*.xml")
-                    //utils.generateJUnit("**/build/test-results/test/TEST-*.xml")
+                    generateReports.genJUnit("**/build/test-results/test/TEST-*.xml")
                 }
 
                 if (params.Checkstyle) {
-                    generateReports.getCheckstyle("**/build/reports/checkstyle/*.xml")
-                    //utils.generateCheckstyle("**/build/reports/checkstyle/*.xml")
+                    generateReports.genCheckstyle("**/build/reports/checkstyle/*.xml")
                 }
             }
 
