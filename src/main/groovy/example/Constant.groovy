@@ -24,6 +24,9 @@ class Constant {
      * */
     static final String INSERT_BTN = "Insert"
     static final String EMAIL_EXAMPLE = "example@email.com"
+    static final String SENDING_EMAIL_TO = "Sending Email To"
+    static final String GENERATE_JUNIT_REPORT = "Generating JUnit Report"
+    static final String GENERATE_CHECKSTYLE_REPORT = "Generating Checkstyle Report"
 
     static final String INIT_STAGE = "Initialize"
     static final String BUILD_STAGE = "Build"

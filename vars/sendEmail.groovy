@@ -6,6 +6,8 @@ def call(Map config = [:]) {
     def subjectMessage = ""
 
     if (status != null) {
+        echo "${Constant.SENDING_EMAIL_TO} ${config.emailTo}"
+
         if (status == 'Success') {
             bodyMessage = Constant.BODY_EMAIL_SUCCESS_MSG
             subjectMessage = Constant.SUBJECT_EMAIL_SUCCESS_MSG

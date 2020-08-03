@@ -47,11 +47,8 @@ pipeline {
 
                     if (utils.validateEmail(emailto)) {
                         outputMessage.printMsg('no_email')
-                        //emailAddress = utils utilities: 'inputEmail'
                         emailAddress = utils.inputEmail()
                     } else {
-                        //isPatternValid = utils utilities: 'emailPattern', params: emailto
-
                         if (utils.validateEmailPattern(emailto)) {
                             emailAddress = emailto
                         } else {
@@ -61,7 +58,6 @@ pipeline {
                     }
 
                     //Checking again if email valid or not
-                    //isEmailValid = utils utilities: 'validateEmail', params: emailAddress
                     if (utils.validateEmail(emailAddress)) {
                         currentBuild.result = 'ABORTED'
                         outputMessage outputType: 'build', status: 'aborted', params: emailAddress
@@ -119,17 +115,11 @@ pipeline {
                 )
 
                 if (params.JUnit) {
-                    outputMessage "Generating JUnit Reports"
-                    junit testResults: "**/build/test-results/test/TEST-*.xml"
+                    utils.generateJUnit("**/build/test-results/test/TEST-*.xml")
                 }
 
                 if (params.Checkstyle) {
-                    outputMessage "Generating Checkstyle Reports"
-                    recordIssues(
-                            tools: [
-                                    checkStyle(pattern: '**/build/reports/checkstyle/*.xml')
-                            ]
-                    )
+                    utils.generateCheckstyle("**/build/reports/checkstyle/*.xml")
                 }
             }
 

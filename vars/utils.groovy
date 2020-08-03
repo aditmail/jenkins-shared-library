@@ -42,6 +42,22 @@ def call(Map config = [:]) {
     }
 }
 
+/** Generate JUnit Test Result **/
+def generateJUnit(location = "") {
+    echo "$Constant.GENERATE_JUNIT_REPORT"
+    junit testResults: location
+}
+
+/** Generate Checkstyle Reports **/
+def generateCheckstyle(location = "") {
+    echo "$Constant.GENERATE_CHECKSTYLE_REPORT"
+    recordIssues(
+            tools: [
+                    checkStyle(pattern: location)
+            ]
+    )
+}
+
 /** Get TimeStamp **/
 static String dateTime() {
     return new Date().format('dd/MM/yyyy HH:mm:ss')
