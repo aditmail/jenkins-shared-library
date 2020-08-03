@@ -16,6 +16,9 @@ class Constant {
     static final String BODY_EMAIL_FAILED_MSG = "Test Failed Occurs\nCheck Console Output at below to see Detail\n"
     static final String SUBJECT_EMAIL_FAILED_MSG = "Failure in Build Jenkins: :["
 
+    static final String NO_EMAIL_SET_MSG = "Seems like you haven\'t set Email yet, Requesting Input.."
+    static final String INVALID_EMAIL_SET_MSG = "Seems like you set Invalid Email, Requesting New Input.."
+
     /**
      * Simple Task
      * */
@@ -26,6 +29,7 @@ class Constant {
     static final String BUILD_STAGE = "Build"
     static final String UNIT_TEST_STAGE = "Unit-Test"
     static final String POST_STAGE = "Build Job Done with"
+    static final String RUNNING_AT = "Stage Running At"
 
 
 

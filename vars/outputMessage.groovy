@@ -4,6 +4,21 @@ def call(String message) {
     echo message
 }
 
+def printMsg(status = "") {
+    switch (status) {
+        case 'no_email':
+            echo "$Constant.NO_EMAIL_SET_MSG"
+            break
+        case 'invalid_email':
+            echo "$Constant.INVALID_EMAIL_SET_MSG"
+            break
+        default:
+            echo status
+            break
+    }
+
+}
+
 def call(Map config = [:]) {
     def dateTime = new Date().format('dd/MM/yyyy HH:mm:ss')
 
@@ -11,13 +26,13 @@ def call(Map config = [:]) {
     if (outputType == "startStage") {
         switch (config.level) {
             case 'init':
-                echo "$Constant.INIT_STAGE Stage Running at $dateTime"
+                echo "$Constant.INIT_STAGE $Constant.RUNNING_AT $dateTime"
                 break
             case 'build':
-                echo "$Constant.BUILD_STAGE Stage Running at $dateTime"
+                echo "$Constant.BUILD_STAGE $Constant.RUNNING_AT $dateTime"
                 break
             case 'unit-test':
-                echo "$Constant.UNIT_TEST_STAGE Stage Running at $dateTime"
+                echo "$Constant.UNIT_TEST_STAGE $Constant.RUNNING_AT $dateTime"
                 break
             case 'post-stage':
                 echo "$Constant.POST_STAGE ${(config.params != null ? " Status: ${config.params}" : "")}"

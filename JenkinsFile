@@ -22,7 +22,8 @@ pipeline {
     }
 
     stages {
-        stage('Git-Stage') {
+        //Use this if using Job-DSL? or Seed Job?
+        /*stage('Git-Stage') {
             steps {
                 vcCheckout(
                         branch: 'master',
@@ -30,7 +31,7 @@ pipeline {
                         credentialsId: 'b5656ab7-b7ed-4c02-9833-9af6877e2b9e'
                 )
             }
-        }
+        }*/
 
         stage('Initialize-Stage') {
             environment {
@@ -43,32 +44,32 @@ pipeline {
                 script {
                     outputMessage utils.dateTime()
                     outputMessage outputType: 'startStage', level: 'init'
-                    isEmailValid = utils utilities: 'validateEmail', params: emailto
 
                     if (utils.validateEmail(emailto)) {
-                        outputMessage "Seems Like you Haven\'t Set Email Yet, Requesting New Input.."
-                        emailAddress = utils utilities: 'inputEmail'
+                        outputMessage.printMsg('no_email')
+                        //emailAddress = utils utilities: 'inputEmail'
+                        emailAddress = utils.inputEmail()
                     } else {
-                        isPatternValid = utils utilities: 'emailPattern', params: emailto
+                        //isPatternValid = utils utilities: 'emailPattern', params: emailto
 
-                        if (isPatternValid) {
+                        if (utils.validateEmailPattern(emailto)) {
                             emailAddress = emailto
                         } else {
-                            outputMessage "Seems Like you Set Invalid Email, Requesting New Input.."
-                            emailAddress = utils utilities: 'inputEmail'
+                            outputMessage.printMsg('invalid_email')
+                            emailAddress = utils.inputEmail()
                         }
                     }
 
                     //Checking again if email valid or not
-                    isEmailValid = utils utilities: 'validateEmail', params: emailAddress
-                    if (utils.validateEmail(emailto)) {
+                    //isEmailValid = utils utilities: 'validateEmail', params: emailAddress
+                    if (utils.validateEmail(emailAddress)) {
                         currentBuild.result = 'ABORTED'
                         outputMessage outputType: 'build', status: 'aborted', params: emailAddress
+                    } else {
+                        bat "java -version"
+                        bat "gradle -v"
                     }
                 }
-
-                bat "java -version"
-                bat "gradle -v"
             }
         }
 

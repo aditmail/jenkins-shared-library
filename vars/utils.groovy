@@ -67,3 +67,11 @@ def inputEmail() {
 static def Boolean validateEmail(emailAddress = "") {
     return (emailAddress == null || emailAddress == "" || emailAddress == "example@email.com")
 }
+
+/** check Email Pattern **/
+static def Boolean validateEmailPattern(emailAddress = "") {
+    String regex = Constant.EMAIL_REGEX
+    Pattern pattern = Pattern.compile(regex)
+
+    return pattern.matcher(emailAddress).matches()
+}
