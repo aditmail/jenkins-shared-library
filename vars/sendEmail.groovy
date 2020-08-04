@@ -6,7 +6,7 @@ def call(Map config = [:]) {
     def subjectMessage
 
     if (status != null) {
-        echo "${Constant.SENDING_EMAIL_TO} ${config.emailTo}"
+        //echo "${Constant.SENDING_EMAIL_TO} ${config.emailTo}"
 
         if (status == 'Success') {
             bodyMessage = Constant.BODY_EMAIL_SUCCESS_MSG
@@ -31,8 +31,8 @@ def call(Map config = [:]) {
                 compressLog       : true,
                 attachLog         : true,
                 //recipientProviders: [[$class: 'DevelopersRecipientProvider'], [$class: 'RequesterRecipientProvider']], //This use to Linking email send To..?
-                //attachmentsPattern: "**/build/test-results/test/TEST-*.xml",
-                attachmentsPattern: "**/build/reports/tests/test/*.html"
+                attachmentsPattern: "**/build/test-results/test/TEST-*.xml",
+                //attachmentsPattern: "**/build/reports/tests/test/*.html"
         ])
     }
 }

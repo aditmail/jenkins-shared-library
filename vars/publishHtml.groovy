@@ -4,7 +4,7 @@ def call(Map params) {
             alwaysLinkToLastBuild: false,
             keepAll              : true,
             reportDir            : "${params.reportDir}",
-            reportFiles          : "${params.reportFile}",
+            reportFiles          : "${params.reportFiles}",
             reportName           : "${params.reportName}"
     ]
 }
