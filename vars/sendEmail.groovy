@@ -25,11 +25,13 @@ def call(Map config = [:]) {
 
         emailext([
                 attachLog         : true,
-                attachmentsPattern: "**/build/test-results/test/TEST-*.xml",
+                //attachmentsPattern: "**/build/test-results/test/TEST-*.xml",
+                attachmentsPattern: "**/build/reports/tests/test/*.html",
                 body              : "Email Ext: ${bodyMessage} ${env.BUILD_URL}\n\nBuild Number\t\t: ${env.BUILD_NUMBER}\nBuild Tag\t\t: ${env.BUILD_TAG}",
                 recipientProviders: [[$class: 'DevelopersRecipientProvider'], [$class: 'RequesterRecipientProvider']],
                 compressLog       : true,
-                to                : "${config.emailTo}"
+                subject           : "${subjectMessage} ${env.JOB_NAME} #${env.BUILD_NUMBER}"
+                //to                : "${config.emailTo}"
         ])
     }
 }
