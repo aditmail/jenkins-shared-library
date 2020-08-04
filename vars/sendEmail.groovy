@@ -16,22 +16,23 @@ def call(Map config = [:]) {
             subjectMessage = Constant.SUBJECT_EMAIL_FAILED_MSG
         }
 
-        mail([
+        /*mail([
                 body   : "${bodyMessage} ${env.BUILD_URL}\n\nBuild Number\t\t: ${env.BUILD_NUMBER}\nBuild Tag\t\t: ${env.BUILD_TAG}",
                 from   : "aditya@jenkins.com",
                 subject: "${subjectMessage} ${env.JOB_NAME} #${env.BUILD_NUMBER}",
                 to     : "${config.emailTo}"
-        ])
+        ])*/
 
         emailext([
-                attachLog         : true,
-                //attachmentsPattern: "**/build/test-results/test/TEST-*.xml",
-                attachmentsPattern: "**/build/reports/tests/test/*.html",
+                to                : "${config.emailTo}",
+                subject           : "${subjectMessage} ${env.JOB_NAME} #${env.BUILD_NUMBER}",
                 body              : "Email Ext: ${bodyMessage} ${env.BUILD_URL}\n\nBuild Number\t\t: ${env.BUILD_NUMBER}\nBuild Tag\t\t: ${env.BUILD_TAG}",
-                recipientProviders: [[$class: 'DevelopersRecipientProvider'], [$class: 'RequesterRecipientProvider']],
                 compressLog       : true,
-                subject           : "${subjectMessage} ${env.JOB_NAME} #${env.BUILD_NUMBER}"
-                //to                : "${config.emailTo}"
+                attachLog         : true,
+                //recipientProviders: [[$class: 'DevelopersRecipientProvider'], [$class: 'RequesterRecipientProvider']], //This use to Linking email send To..?
+                //attachmentsPattern: "**/build/test-results/test/TEST-*.xml",
+                attachmentsPattern: "**/build/reports/tests/test/*.html"
+
         ])
     }
 }
