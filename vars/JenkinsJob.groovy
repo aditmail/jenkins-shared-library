@@ -101,11 +101,7 @@ def call() {
             always {
                 script {
                     outputMessage outputType: 'startStage', level: 'post-stage', params: currentBuild.currentResult
-                }
-            }
 
-            success {
-                script {
                     if (params.JUnit) {
                         generateReports.genJUnit("**/build/test-results/test/TEST-*.xml")
                     }
@@ -113,21 +109,22 @@ def call() {
                     if (params.Checkstyle) {
                         generateReports.genCheckstyle("**/build/reports/checkstyle/*.xml")
                     }
+                }
+            }
 
+            success {
+                script {
                     sendEmail(
                             status: 'Success',
                             emailTo: emailAddress
                     )
-                }
 
-                publishHTML target: [
-                        allowMissing         : false,
-                        alwaysLinkToLastBuild: false,
-                        keepAll              : true,
-                        reportDir            : "${env.WORKSPACE}/build/reports/tests/test",
-                        reportFiles          : 'index.html',
-                        reportName           : 'JUnit-Reports'
-                ]
+                    publishHtml(
+                            reportDir: "${env.WORKSPACE}/build/reports/tests/test",
+                            reportFiles: 'index.html',
+                            reportName: 'JUnit Reports'
+                    )
+                }
             }
 
             failure {
@@ -135,6 +132,12 @@ def call() {
                     sendEmail(
                             status: 'Failed',
                             emailTo: emailAddress
+                    )
+
+                    publishHtml(
+                            reportDir: "${env.WORKSPACE}/build/reports/tests/test",
+                            reportFiles: 'index.html',
+                            reportName: 'JUnit Reports'
                     )
                 }
             }
