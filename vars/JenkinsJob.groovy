@@ -59,9 +59,9 @@ def call() {
                         //Checking again if email valid or not
                         if (utils.validateEmail(emailAddress)) {
                             currentBuild.result = 'ABORTED'
-                            error("Invalid Parameter in: $emailAddress")
-
                             outputMessage outputType: 'build', status: 'aborted', params: emailAddress
+
+                            error("Invalid Parameter in: $emailAddress")
                         } else {
                             cmdScript method: 'windows', command: 'java -version'
                             cmdScript method: 'windows', command: 'gradle -v'
