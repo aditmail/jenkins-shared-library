@@ -67,18 +67,18 @@ def call() {
             booleanParam(name: 'DEPLOY_APP', defaultValue: false, description: '')
             booleanParam(name: 'DEPLOY_WEB', defaultValue: false, description: '')
         }
-    }
 
-    stages {
-        stage("Reload JenkinsFile") {
-            when {
-                expression {
-                    return "${Refresh}" == "true"
+        stages {
+            stage("Reload JenkinsFile") {
+                when {
+                    expression {
+                        return "${Refresh}" == "true"
+                    }
                 }
-            }
 
-            steps {
-                println("URL Workspace: ${utilBCA.getURLWorkspace("$JOB_NAME")}")
+                steps {
+                    println("URL Workspace: ${utilBCA.getURLWorkspace("$JOB_NAME")}")
+                }
             }
         }
     }
