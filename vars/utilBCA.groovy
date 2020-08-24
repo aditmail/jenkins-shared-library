@@ -89,7 +89,7 @@ def printEnvironment(changes = []) {
     TEMP_JOB_BUILD = builds/
     
     #Remove Recursive files in Windows Style
-    del /s /q "\\${FILE_PATH}"
+    del /s /q "\${FILE_PATH}"
     
     #Inserting JOB_URL to BUILD_URL_CONFIG.txt?
     echo "$JOB_URL" >> "\${FILE_PATH}"
@@ -97,7 +97,7 @@ def printEnvironment(changes = []) {
     #concantenate in Windows Style
     ENV_VAR = `type "\${FILE_PATH}"`
 
-    del /s /q "\\${PATH_PRINTENV}"
+    del /s /q "\${PATH_PRINTENV}"
     printenv >> "${PATH_PRINT_ENV}"
 """
 
