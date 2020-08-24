@@ -98,7 +98,7 @@ def printEnvironment(changes = []) {
             #concantenate in Windows Style
             #ENV_VAR = `type "\${FILE_PATH}"`
         
-            del /s /q "\${PATH_PRINT_ENV}"
+            #del /s /q "\${PATH_PRINT_ENV}"
             printenv >> "${PATH_PRINT_ENV}"
         """
 
