@@ -93,14 +93,12 @@ def call() {
                     stages {
                         stage("Clean Workspace") {
                             steps {
-                                //dir(WORKSPACE) {
-                                    script {
-                                        //cleanWs()
+                                dir(WORKSPACE) {
+                                    cleanWs()
 
-                                        println("URL Workspace: ${utilBCA.getURLWorkspace("$JOB_NAME")}")
-                                        utilBCA.createProjectProperties(projectName: PROJECT_NAME, description: DESCRIPTION)
-                                    }
-                               // }
+                                    println("URL Workspace: ${utilBCA.getURLWorkspace("$JOB_NAME")}")
+                                    utilBCA.createProjectProperties(projectName: PROJECT_NAME, description: DESCRIPTION)
+                                }
                             }
                         }
                     }
