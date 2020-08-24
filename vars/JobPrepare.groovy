@@ -1,9 +1,9 @@
 def call() {
     pipeline {
-        //agent any
-        agent {
-            label 'Windows_Node'
-        }
+        agent any
+        /*agent {
+            label "Windows_Node"
+        }*/
 
         tools {
             maven 'maven3.6-internal'
