@@ -90,15 +90,16 @@ def call() {
                     expression {
                         return "${Refresh}" == "false"
                     }
-                    stages {
-                        stage("Clean Workspace") {
-                            steps {
-                                dir(WORKSPACE) {
-                                    cleanWs()
+                }
 
-                                    println("URL Workspace: ${utilBCA.getURLWorkspace("$JOB_NAME")}")
-                                    utilBCA.createProjectProperties(projectName: PROJECT_NAME, description: DESCRIPTION)
-                                }
+                stages {
+                    stage("Clean Workspace") {
+                        steps {
+                            dir(WORKSPACE) {
+                                cleanWs()
+
+                                println("URL Workspace: ${utilBCA.getURLWorkspace("$JOB_NAME")}")
+                                utilBCA.createProjectProperties(projectName: PROJECT_NAME, description: DESCRIPTION)
                             }
                         }
                     }
