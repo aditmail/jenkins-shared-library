@@ -139,7 +139,7 @@ def call() {
                                     ]
                                     //Skipped since there's error exception occur
                                     //cannot run program "nohup": CreateProcess error=2, The system cannot find the file specified
-                                    //utilBCA.printEnvironment(changesFileConfig)
+                                    utilBCA.printEnvironment(changesFileConfig)
 
                                     echo bat(returnStdout: true, script: 'set')
                                 }

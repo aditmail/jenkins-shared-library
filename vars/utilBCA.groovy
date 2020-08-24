@@ -76,18 +76,6 @@ def createProjectProperties(Map properties = [:]) {
 }
 
 def printEnvironment(changes = []) {
-/*    writeFile file: 'var/printenv.txt', text: '''
-\${printenv}
-'''*/
-
-    FILENAME = "var/printenvironment.txt"
-
-    File projectProps = new File("${WORKSPACE}/${FILENAME}")
-    new File(projectProps.getParent()).mkdirs()
-
-    projectProps.write('')
-    projectProps.append("${echo bat(returnStdout: true, script: 'set')} \n")
-
     try {
         PATH_PRINT_ENV = "var/printenv.txt"
 
