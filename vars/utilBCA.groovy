@@ -76,9 +76,10 @@ def createProjectProperties(Map properties = [:]) {
 }
 
 def printEnvironment(changes = []) {
-    PATH_PRINT_ENV = "var/printenv.txt"
+    try {
+        PATH_PRINT_ENV = "var/printenv.txt"
 
-    labelledShell label: "printEnvironment", script: """
+        labelledShell label: "printEnvironment", script: """
     JENKINS_JOB = ${JENKINS_HOME}/jobs
     
     echo "JOB_NAME: ${JOB_NAME}"
@@ -101,7 +102,10 @@ def printEnvironment(changes = []) {
     printenv >> "${PATH_PRINT_ENV}"
 """
 
-    for (int i = 0; i < changes.size(); i++) {
-        println(changes[i])
+        for (int i = 0; i < changes.size(); i++) {
+            println(changes[i])
+        }
+    } catch (Exception e) {
+        e.printStackTrace()
     }
 }
