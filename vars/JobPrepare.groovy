@@ -2,10 +2,10 @@
 
 def call() {
     pipeline {
-        agent any
-        /*agent {
+        //agent any
+        agent {
             label 'Windows_Node'
-        }*/
+        }
 
         tools {
             maven 'maven3.6-internal'
@@ -137,6 +137,8 @@ def call() {
                                             [dest: 'changes-config-app.txt', src: 'temp-changes-config-app.txt'],
                                             [dest: 'changes-config-web.txt', src: 'temp-changes-config-web.txt']
                                     ]
+                                    //Skipped since there's error exception occur
+                                    //cannot run program "nohup": CreateProcess error=2, The system cannot find the file specified
                                     utilBCA.printEnvironment(changesFileConfig)
                                 }
                             }
