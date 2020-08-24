@@ -2,7 +2,11 @@
 
 def call() {
     pipeline {
-        agent any
+        //agent any
+        agent {
+            label 'Windows_Node'
+        }
+
         tools {
             maven 'maven3.6-internal'
         }
@@ -78,6 +82,28 @@ def call() {
 
                 steps {
                     println("URL Workspace: ${utilBCA.getURLWorkspace("$JOB_NAME")}")
+                }
+            }
+
+            stage("Running Build") {
+                when {
+                    expression {
+                        return "${Refresh}" == "false"
+                    }
+                    stages {
+                        stage("Clean Workspace") {
+                            steps {
+                                dir(WORKSPACE) {
+                                    script {
+                                        cleanWs()
+
+                                        println("URL Workspace: ${utilBCA.getURLWorkspace("$JOB_NAME")}")
+                                        utilBCA.createProjectProperties(projectName: PROJECT_NAME, description: DESCRIPTION)
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }

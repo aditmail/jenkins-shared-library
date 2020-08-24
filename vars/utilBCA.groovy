@@ -53,3 +53,23 @@ def getURLWorkspace(
 static def getURLCustomWorkspace() {
     return "localhost:8080/job/Repository/job/CustomWorkspace/"
 }
+
+def createProjectProperties(Map properties = [:]) {
+    /**
+     * Map -> projectName = Name of the Project
+     * Map -> description = Description of the Project
+     * */
+
+    try {
+        FILENAME = "var/project.properties"
+
+        File projectProps = new File("${WORKSPACE}/${FILENAME}")
+        new File(projectProps.getParent()).mkdirs()
+
+        projectProps.write('')
+        projectProps.append("projectName=${properties.projectName} \n")
+        projectProps.append("description=${properties.description} \n")
+    } catch (Exception e) {
+        e.printStackTrace()
+    }
+}
