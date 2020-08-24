@@ -127,6 +127,21 @@ def call() {
                             }
                         }
                     }
+
+                    stage("Check Parameter Checklist") {
+                        steps {
+                            dir(WORKSPACE) {
+                                script {
+                                    changesFileConfig = [
+                                            [dest: 'changes-deployment.txt', src: 'temp-changes-deployment.txt'],
+                                            [dest: 'changes-config-app.txt', src: 'temp-changes-config-app.txt'],
+                                            [dest: 'changes-config-web.txt', src: 'temp-changes-config-web.txt']
+                                    ]
+                                    utilBCA.printEnvironment(changesFileConfig)
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -145,25 +160,25 @@ def writeFileDeployment() {
 
 def writeFileConfigAPP() {
     writeFile file: 'var/temp-changes-config-app.txt', text: '''
-    #Config APP
-    [app]Debug.properties
-    [app]SMSMessages.properties
-    [app]System.properties
-    [app]EmailQueue.properties
+#Config APP
+[app]Debug.properties
+[app]SMSMessages.properties
+[app]System.properties
+[app]EmailQueue.properties
 '''
 }
 
 def writeFileConfigWEB() {
     writeFile file: 'var/temp-changes-config-web.txt', text: '''
-    #Config WEB
-    [web]ibank/Debug.properties
-    [web]ibank/cabang.xml
-    [web]ibank/kota.xml
-    [web]ibank/System.properties
-    [web]mklik/Debug.properties
-    [web]mklik/cabang.xml
-    [web]mklik/kota.xml
-    [web]mklik/System.properties
+#Config WEB
+[web]ibank/Debug.properties
+[web]ibank/cabang.xml
+[web]ibank/kota.xml
+[web]ibank/System.properties
+[web]mklik/Debug.properties
+[web]mklik/cabang.xml
+[web]mklik/kota.xml
+[web]mklik/System.properties
 '''
 }
 
