@@ -99,7 +99,7 @@ def call() {
                                 cleanWs()
 
                                 println("URL Workspace: ${utilBCA.getURLWorkspace("$JOB_NAME")}")
-                                utilBCA.createProjectProperties(projectName: PROJECT_NAME, description: DESCRIPTION)
+                                utilBCA.createProjectProperties(projectName: "${PROJECT_NAME}", description: "${DESCRIPTION}")
                             }
                         }
                     }
