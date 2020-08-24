@@ -107,10 +107,64 @@ def call() {
                             }
                         }
                     }
+
+                    stage("Create Persistent Checklist") {
+                        steps {
+                            dir(WORKSPACE) {
+                                script {
+                                    parallel(
+                                            "Deployment": {
+                                                writeFileDeployment()
+                                            },
+                                            "Config APP": {
+                                                writeFileConfigAPP()
+                                            },
+                                            "Config WEB": {
+                                                writeFileConfigWEB()
+                                            }
+                                    )
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
     }
+}
+
+def writeFileDeployment() {
+    writeFile file: 'var/temp-changes-deployment.txt', text: '''
+    #Deployment
+    IBank
+    IBSmartphone
+    IBankBatch
+    LimitValidator
+'''
+}
+
+def writeFileConfigAPP() {
+    writeFile file: 'var/temp-changes-config-app.txt', text: '''
+    #Config APP
+    [app]Debug.properties
+    [app]SMSMessages.properties
+    [app]System.properties
+    [app]EmailQueue.properties
+'''
+}
+
+def writeFileConfigWEB() {
+    writeFile file: 'var/temp-changes-config-web.txt', text: '''
+    #Config WEB
+    [web]ibank/Debug.properties
+    [web]ibank/cabang.xml
+    [web]ibank/kota.xml
+    [web]ibank/System.properties
+    [web]mklik/Debug.properties
+    [web]mklik/cabang.xml
+    [web]mklik/kota.xml
+    [web]mklik/System.properties
+'''
 }
 
 def writeDeploymentConfig() {
