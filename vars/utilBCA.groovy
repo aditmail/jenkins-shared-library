@@ -19,7 +19,8 @@ def getURLWorkspace(
     if (node.isEmpty()) node = "${NODE_NAME}"
 
     if (node == "master") {
-        return getURLCustomWorkspace() + WS_BUILD_NUMBER + "/execution/node/9/ws/jenkins/${workspace}/${path}"
+        //return getURLCustomWorkspace() + WS_BUILD_NUMBER + "/execution/node/9/ws/jenkins/${workspace}/${path}"
+        return WORKSPACE
                 .replace(" ", "%20")
                 .replace("%2F", "%252F")
     } else if (node.startsWith("LandingDeploy")) {

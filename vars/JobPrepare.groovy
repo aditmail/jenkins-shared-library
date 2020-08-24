@@ -101,6 +101,8 @@ def call() {
 
                                     println("URL Workspace: ${utilBCA.getURLWorkspace("$JOB_NAME")}")
                                     utilBCA.createProjectProperties(projectName: "${PROJECT_NAME}", description: "${DESCRIPTION}")
+
+                                    writeDeploymentConfig()
                                 }
                             }
                         }
@@ -109,4 +111,319 @@ def call() {
             }
         }
     }
+}
+
+def writeDeploymentConfig() {
+    writeFile file: 'var/deployment_descriptor.json', text: '''
+{
+          "paths": [
+                        {
+                            "node_id": "web_mbca",
+                            "path": "/bcaibank/app/kp1_ibank_inter12c_1/lib"
+                        },
+                        {
+                            "node_id": "web_wsa2",
+                            "path": "/bcaibank/app/kp2_ibank_inter12c_1/lib"
+                        },
+                        {
+                            "node_id": "web_grha",
+                            "path": "/bcaibank/app/kp3_ibank_inter12c_1/lib"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "INTRA",
+            "node_groups": [
+                {
+                    "id": "app_mbca",
+                    "nodes": ["APP/10.16.50.32_BCA1APP1", "APP/10.0.50.37_BCA1APP4"]
+                },
+                {
+                    "id": "app_wsa2",
+                    "nodes": ["APP/10.0.50.36_BCA2APP1", "APP/10.0.50.37_BCA2APP4"]
+                },
+                {
+                    "id": "app_grha",
+                    "nodes": ["APP/10.32.50.36_BCA3APP1", "APP/10.32.50.37_BCA3APP4"]
+                },
+                {
+                    "id": "web_mbca",
+                    "nodes": ["WEB/10.16.42.128_BCA1WIBI01"]
+                },
+                {
+                    "id": "web_wsa2",
+                    "nodes": ["WEB/10.0.42.128_BCA2WIBI01"]
+                },
+                {
+                    "id": "web_grha",
+                    "nodes": ["WEB/10.32.42.128_BCA3WIBI01"]
+                }
+            ],
+            "deploy_paths": [
+                {
+                    "tag": "app_deployment",
+                    "path": [
+                        {
+                            "node_id": "app_mbca",
+                            "path": "/bcaibank/app/ibank_intra12c_1/deployment/12.2.1"
+                        },
+                        {
+                            "node_id": "app_wsa2",
+                            "path": "/bcaibank/app/ibank_intra12c_1/deployment/12.2.1"
+                        },
+                        {
+                            "node_id": "app_grha",
+                            "path": "/bcaibank/app/ibank_intra12c_1/deployment/12.2.1"
+                        }
+                    ]
+                },
+                {
+                    "tag": "lib_app",
+                    "paths": [
+                        {
+                            "node_id": "app_mbca",
+                            "path": "/bcaibank/app/ibank_intra12c_1/lib"
+                        },
+                        {
+                            "node_id": "app_wsa2",
+                            "path": "/bcaibank/app/ibank_intra12c_1/lib"
+                        },
+                        {
+                            "node_id": "app_grha",
+                            "path": "/bcaibank/app/ibank_intra12c_1/lib"
+                        }
+                    ]
+                },
+                {
+                    "tag": "web_deployment",
+                    "paths": [
+                        {
+                            "node_id": "web_mbca",
+                            "path": "/bcaibank/app/kp1_ibank_intra12c_1/deployment/kp1_ibank_intra1"
+                        },
+                        {
+                            "node_id": "web_wsa2",
+                            "path": "/bcaibank/app/kp2_ibank_intra12c_1/deployment/kp2_ibank_intra1"
+                        },
+                        {
+                            "node_id": "web_grha",
+                            "path": "/bcaibank/app/kp3_ibank_intra12c_1/deployment/kp3_ibank_intra1"
+                        }
+                    ]
+                },
+                {
+                    "tag": "lib_web",
+                    "paths": [
+                        {
+                            "node_id": "web_mbca",
+                            "path": "/bcaibank/app/kp1_ibank_intra12c_1/lib"
+                        },
+                        {
+                            "node_id": "web_wsa2",
+                            "path": "/bcaibank/app/kp2_ibank_intra12c_1/lib"
+                        },
+                        {
+                             "node_id": "web_grha",
+                             "path": "/bcaibank/app/kp3_ibank_intra12c_1/lib"
+                        }
+                  ]
+                }
+            ]
+        },
+        {
+            "name": "PILOT",
+            "node_groups": [
+                {
+                    "id": "app_mbca",
+                    "nodes": ["APP/10.16.50.32-BCA1APP1"]
+                },
+                {
+                    "id": "app_wsa2",
+                    "nodes": ["APP/10.0.50.36-BCA2APP1"]
+                },
+                {
+                    "id": "app_grha",
+                    "nodes": ["APP/10.32.50.36-BCA3APP1"]
+                },
+                
+                {
+                    "id": "web_mbca",
+                    "nodes": ["WEB/10.16.42.129-BCA1WIBI02"]
+                },
+                {
+                    "id": "web_wsa2",
+                    "nodes": ["WEB/10.0.42.129-BCA2WIBI02"]
+                },
+                {
+                    "id": "web_grha",
+                    "nodes": ["WEB/10.32.42.129-BCA3WIBI02"]
+                }
+            ],
+            "deploy_paths": [
+                {
+                    "tag": "app_deployment",
+                    "paths": [
+                        {
+                            "node_id": "app_mbca",
+                            "path": "/bcaibank/app/ibank_pilot12c_1/deployment"
+                        },
+                        {
+                            "node_id": "app_wsa2",
+                            "path": "/bcaibank/app/ibank_pilot12c_1/deployment"
+                        },
+                        {
+                            "node_id": "app_grha",
+                            "path": "/bcaibank/app/ibank_pilot12c_1/deployment"
+                        }
+                    ]
+                },
+                {
+                    "tag": "lib_app",
+                    "paths": [
+                        {
+                            "node_id": "app_mbca",
+                            "path": "/bcaibank/app/ibank_pilot12c_1/lib"
+                        },
+                        {
+                            "node_id": "app_wsa2",
+                            "path": "/bcaibank/app/ibank_pilot12c_1/lib"
+                        },
+                        {
+                            "node_id": "app_grha",
+                            "path": "/bcaibank/app/ibank_pilot12c_1/lib"
+                        }
+                    ]
+                },
+                {
+                    "tag": "web_deployment",
+                    "paths": [
+                        {
+                            "node_id": "web_mbca",
+                            "path": "/bcaibank/app/kp1_ibank_pilot12c_1/deployment/ibank_pilot1/12.2.1"
+                        },
+                        {
+                            "node_id": "web_wsa2",
+                            "path": "/bcaibank/app/kp2_ibank_pilot12c_1/deployment/ibank_pilot1/12.2.1"
+                        },
+                        {
+                            "node_id": "web_grha",
+                            "path": "/bcaibank/app/kp3_ibank_pilot12c_1/deployment/ibank_pilot1/12.2.1"
+                        }
+                    ]
+                },
+                {
+                    "tag": "mklik_deployment",
+                    "paths": [
+                        {
+                            "node_id": "web_mbca",
+                            "path": "/bcaibank/app/kp1_ibank_pilot12c_1/deployment/mklik_pilot1/12.2.1"
+                        },
+                        {
+                            "node_id": "web_wsa2",
+                            "path": "/bcaibank/app/kp2_ibank_pilot12c_1/deployment/mklik_pilot1/12.2.1"
+                        },
+                        {
+                            "node_id": "web_grha",
+                            "path": "/bcaibank/app/kp3_ibank_pilot12c_1/deployment/mklik_pilot1/12.2.1"
+                        }
+                    ]
+                },
+                {
+                    "tag": "lib_web",
+                    "paths": [
+                        {
+                            "node_id": "web_mbca",
+                            "path": "/bcaibank/app/kp1_ibank_pilot12c_1/lib"
+                        },
+                        {
+                            "node_id": "web_wsa2",
+                            "path": "/bcaibank/app/kp2_ibank_pilot12c_1/lib"
+                        },
+                        {
+                            "node_id": "web_grha",
+                            "path": "/bcaibank/app/kp3_ibank_pilot12c_1/lib"
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+
+    "artifacts": [
+        {
+            "tag":"app_deployment",
+            "search_paths":[
+                "/appjenkins/data/jenkins/workspace/klikBCAIndividu/BUILD/BACKEND/**"
+            ],
+            "file_qualifiers": ["*.jar", "*.war", "*.ear"],
+            "searchable_artifacts":[
+                {
+                    "checklist_name":"IBank",
+                    "products":[
+                        { "build_name":"IBankApp.jar" }
+                    ]
+                }
+            ]
+        },
+        {
+            "tag":"web_deployment",
+            "search_paths":[
+                "/appjenkins/data/jenkins/workspace/klikBCAIndividu/BUILD/BACKEND/**"
+            ],
+            "file_qualifiers": ["*.jar", "*.war", "*.ear"],
+            "searchable_artifacts":[
+                {
+                    "checklist_name":"IBank",
+                    "products":[
+                        { "build_name":"IBankWeb.war" }
+                    ]
+                }
+            ]
+        },
+        {
+            "tag":"mklik_deployment",
+            "search_paths":[
+                "/appjenkins/data/jenkins/workspace/klikBCAIndividu/BUILD/BACKEND/**"
+            ],
+            "file_qualifiers": ["*.jar", "*.war", "*.ear"],
+            "searchable_artifacts":[
+                {
+                    "checklist_name": "IBSmartphone",
+                    "products":[
+                        {"build_name": "sp.war"}
+                    ]
+                }
+            ]
+        }
+    ],
+
+    "repositories": [
+        {
+            "url": "http://10.4.203.28:8081/artifactory/RepositoryDevOps",
+            "repository_artifacts": [
+                {
+                    "tag": "lib_app",
+                    "checklist_name": "LimitValidator",
+                    "repository_path": "com.lib.IBank.12c:LimitValidator",
+                    "artifact_name": "LimitValidator-2.0",
+                    "version": "2.0",
+                    "type": "zip",
+                    "action": "unzip"
+                },
+                {
+                    "tag": "lib_web",
+                    "checklist_name": "LimitValidator",
+                    "repository_path": "com.lib.IBank.12c:LimitValidator",
+                    "artifact_name": "LimitValidator-2.0",
+                    "version": "2.0",
+                    "type": "zip",
+                    "action": "unzip"
+                }
+            ]
+        }
+    ]
+}
+'''
 }
