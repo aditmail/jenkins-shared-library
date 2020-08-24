@@ -97,21 +97,21 @@ def printEnvironment(changes = []) {
             echo "JOB_NAME: ${JOB_NAME}"
             echo "JENKINS_JOB: \${JENKINS_JOB}"
             
-            REM #FILE_PATH = "${WORKSPACE}/var/BUILD_URL_CONFIG.txt"
+            FILE_PATH = "${WORKSPACE}/var/BUILD_URL_CONFIG.txt"
             TEMP_JOB = job/
             TEMP_JOB_BUILD = builds/
             
             REM #Remove Recursive files in Windows Style
-            REM #del /s /q "\${FILE_PATH}"
+            del /s /q "\${FILE_PATH}"
             
             REM #Inserting JOB_URL to BUILD_URL_CONFIG.txt?
-            REM #echo "$JOB_URL" >> "\${FILE_PATH}"
+            echo "$JOB_URL" >> "\${FILE_PATH}"
         
             REM #concantenate in Windows Style
-            REM #ENV_VAR = `type "\${FILE_PATH}"`
+            ENV_VAR = `type "\${FILE_PATH}"`
         
-            REM #del /s /q "\${PATH_PRINT_ENV}"
-            REM #printenv >> "${PATH_PRINT_ENV}"
+            del /s /q "\${PATH_PRINT_ENV}"
+            set >> "${PATH_PRINT_ENV}"
         """
 
         for (int i = 0; i < changes.size(); i++) {
