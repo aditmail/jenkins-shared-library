@@ -80,27 +80,27 @@ def printEnvironment(changes = []) {
         PATH_PRINT_ENV = "var/printenv.txt"
 
         labelledShell label: "printEnvironment", script: """
-    JENKINS_JOB = ${JENKINS_HOME}/jobs
-    
-    echo "JOB_NAME: ${JOB_NAME}"
-    echo "JENKINS_JOB: \${JENKINS_JOB}"
-    
-    FILE_PATH = "${WORKSPACE}/var/BUILD_URL_CONFIG.txt"
-    TEMP_JOB = job/
-    TEMP_JOB_BUILD = builds/
-    
-    #Remove Recursive files in Windows Style
-    # del /s /q "\${FILE_PATH}"
-    
-    #Inserting JOB_URL to BUILD_URL_CONFIG.txt?
-    echo "$JOB_URL" >> "\${FILE_PATH}"
-
-    #concantenate in Windows Style
-    # ENV_VAR = `type "\${FILE_PATH}"`
-
-    # del /s /q "\${PATH_PRINT_ENV}"
-    printenv >> "${PATH_PRINT_ENV}"
-"""
+            JENKINS_JOB = ${JENKINS_HOME}/jobs
+            
+            echo "JOB_NAME: ${JOB_NAME}"
+            echo "JENKINS_JOB: \${JENKINS_JOB}"
+            
+            #FILE_PATH = "${WORKSPACE}/var/BUILD_URL_CONFIG.txt"
+            TEMP_JOB = job/
+            TEMP_JOB_BUILD = builds/
+            
+            #Remove Recursive files in Windows Style
+            #del /s /q "\${FILE_PATH}"
+            
+            #Inserting JOB_URL to BUILD_URL_CONFIG.txt?
+            #echo "$JOB_URL" >> "\${FILE_PATH}"
+        
+            #concantenate in Windows Style
+            #ENV_VAR = `type "\${FILE_PATH}"`
+        
+            del /s /q "\${PATH_PRINT_ENV}"
+            printenv >> "${PATH_PRINT_ENV}"
+        """
 
         for (int i = 0; i < changes.size(); i++) {
             println(changes[i])
