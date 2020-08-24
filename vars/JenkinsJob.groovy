@@ -34,7 +34,7 @@ def call() {
         }*/
 
             stage('Initialize-Stage') {
-                environment {
+                environmentcall {
                     def emailAddress = null
                     def isEmailValid = false
                     def isPatternValid = false
