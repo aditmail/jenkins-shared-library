@@ -129,6 +129,7 @@ def call() {
                     }
 
                     stage("Check Parameter Checklist") {
+                        agent any
                         steps {
                             dir(WORKSPACE) {
                                 script {
