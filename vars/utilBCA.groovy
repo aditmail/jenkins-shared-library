@@ -104,21 +104,21 @@ def printEnvironment(changes = []) {
         """*/
 
         bat label: "printEnvironment", script: """
-            JENKINS_JOB = ${JENKINS_HOME}/jobs
+            set JENKINS_JOB="${JENKINS_HOME}/jobs"
             
             echo "JOB_NAME: ${JOB_NAME}"
-            echo "JENKINS_JOB: \${JENKINS_JOB}"
+            echo JENKINS_JOB: "%JENKINS_JOB%"
             
-            FILE_PATH = "${WORKSPACE}/var/BUILD_URL_CONFIG.txt"
-            TEMP_JOB = job/
-            TEMP_JOB_BUILD = builds/
+            set FILE_PATH="${WORKSPACE}/var/BUILD_URL_CONFIG.txt"
+            set TEMP_JOB="job/"
+            set TEMP_JOB_BUILD="builds/"
             
-            del /s /q "\${FILE_PATH}"
-            echo "$JOB_URL" >> "\${FILE_PATH}"
+            del /s /q "%FILE_PATH%"
+            echo "$JOB_URL" >> "%FILE_PATH%"
 
-            ENV_VAR = `type "\${FILE_PATH}"`
+            set ENV_VAR = `type "%FILE_PATH%"`
             
-            del /s /q "\${PATH_PRINT_ENV}"
+            del /s /q "%PATH_PRINT_ENV%"
             set >> "${PATH_PRINT_ENV}"
         """
 
