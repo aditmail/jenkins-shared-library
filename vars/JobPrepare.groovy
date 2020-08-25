@@ -139,9 +139,17 @@ def call() {
                                     ]
                                     //Skipped since there's error exception occur
                                     //cannot run program "nohup": CreateProcess error=2, The system cannot find the file specified
-                                    utilBCA.printEnvironment(changesFileConfig)
+                                    //utilBCA.printEnvironment(changesFileConfig)
 
-                                    echo bat(returnStdout: true, script: 'set')
+                                    //Print env for windows
+                                    //echo bat(returnStdout: true, script: 'set')
+
+                                    PATH_PRINT_ENV = "var/printenv.txt"
+                                    bat label: 'PrintEnv', script:'''
+                                        del /s /q "\${PATH_PRINT_ENV}"
+                                        set >> "\${PATH_PRINT_ENV}"
+                                        
+                                    '''
                                 }
                             }
                         }
