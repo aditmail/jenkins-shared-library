@@ -144,12 +144,12 @@ def call() {
                                     //Print env for windows
                                     //echo bat(returnStdout: true, script: 'set')
 
-                                    PATH_PRINT_ENV = "var/printenv.txt"
-                                    bat label: 'PrintEnv', script:'''
+                                    /*PATH_PRINT_ENV = "var/printenv.txt"
+                                    bat label: 'PrintEnv', script:"""
                                         del /s /q "\${PATH_PRINT_ENV}"
-                                        set >> "\${PATH_PRINT_ENV}"
+                                        set >> "${PATH_PRINT_ENV}"
                                         
-                                    '''
+                                    """*/
                                 }
                             }
                         }
