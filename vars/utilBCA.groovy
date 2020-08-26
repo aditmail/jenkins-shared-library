@@ -131,8 +131,8 @@ def printEnvironment(changes = []) {
                 java -jar "${EXECUTABLE}/library/jar/JenkinsUtils.jar" \
                 "ReadFileProperties" \
                 "${PATH_PRINT_ENV}" \
-                "var/${changes[i].dest}" \
-                "var/${changes[i].src}" 
+                "var/${changes[i].src}" \
+                "var/${changes[i].dest}"  
             """
         }
     } catch (Exception e) {
