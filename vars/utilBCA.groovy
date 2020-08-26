@@ -128,7 +128,7 @@ def printEnvironment(changes = []) {
             //Running Java File..
             //Since we don't have access to it.. commented
             bat label: "ReadFileProperties", script: """
-                java -jar "${$EXECUTABLE}/library/jar/JenkinsUtils.jar" \
+                java -jar "${EXECUTABLE}/library/jar/JenkinsUtils.jar" \
                 "ReadFileProperties" \
                 "${PATH_PRINT_ENV}" \
                 "var/${changes[i].dest}" \
