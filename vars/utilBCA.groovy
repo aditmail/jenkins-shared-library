@@ -118,7 +118,7 @@ def printEnvironment(changes = []) {
 
             set ENV_VAR = `type "%FILE_PATH%"`
             
-            del /s /q "%PATH_PRINT_ENV%"
+            del /s /q %PATH_PRINT_ENV%
             set>>${PATH_PRINT_ENV}
         """
 
