@@ -154,6 +154,23 @@ def call() {
                             }
                         }
                     }
+
+                    stage("Copy Config n Libraries") {
+                        steps {
+                            dir(WORKSPACE) {
+                                script {
+                                    parallel(
+                                            "Config": {
+
+                                            },
+                                            "Library": {
+
+                                            }
+                                    )
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
