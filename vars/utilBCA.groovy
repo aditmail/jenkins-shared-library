@@ -123,11 +123,9 @@ def printEnvironment(changes = []) {
         """
 
         for (int i = 0; i < changes.size(); i++) {
-            println(changes[i])
-
             //Running Java File..
             //Since we don't have access to it.. commented
-            bat label: "ReadFileProperties", script: """
+            bat label: "ReadFileProperties #${i}", script: """
                 java -jar "${EXECUTABLE}/library/jar/JenkinsUtils.jar" \
                 "ReadFileProperties" \
                 "${PATH_PRINT_ENV}" \

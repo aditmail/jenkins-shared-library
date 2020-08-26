@@ -179,11 +179,11 @@ def call() {
 
 def writeFileDeployment() {
     writeFile file: 'var/temp-changes-deployment.txt', text: '''
-    #Deployment
-    IBank
-    IBSmartphone
-    IBankBatch
-    LimitValidator
+#Deployment
+IBank
+IBSmartphone
+IBankBatch
+LimitValidator
 '''
 }
 
