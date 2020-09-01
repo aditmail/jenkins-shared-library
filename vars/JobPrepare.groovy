@@ -2,9 +2,10 @@
 
 def call() {
     pipeline {
-        //agent any
-        agent {
-            label 'Windows_Node'
+        agent none
+
+        options {
+            disableConcurrentBuilds()
         }
 
         tools {
@@ -13,7 +14,7 @@ def call() {
 
         environment {
             RUN_UAT = true
-            APPLICATION = "klikBCAIndividu"
+            APPLICATION = 'klikBCAIndividu'
             DEPLOY_FOLDER = "${JWORKSPACE}/${APPLICATION}/PREPARE/UAT/${SERVER_TARGET}"
             WORKSPACE = "${JWORKSPACE}/${JOB_NAME}"
         }
@@ -34,19 +35,21 @@ def call() {
 
             //Copy Library for APP
             text(name: 'CopyLibApp', defaultValue: '', description: '''
-                Please Write your lib to copy in maven structure 
-				Example :: 
-				<dependency>
-							  <groupId>log4j</groupId>
-							  <artifactId>log4j</artifactId>
-							  <version>1.2.13</version>
-				</dependency>
-				'''
+                Please Write your lib to copy in maven structure
+                Example ::
+                <dependency>
+                              <groupId>log4j</groupId>
+                              <artifactId>log4j</artifactId>
+                              <version>1.2.13</version>
+                </dependency>
+                '''
             )
             string(name: 'CustomFolderLibApp', defaultValue: '', description: '')
 
             booleanParam(name: 'StripVersion', defaultValue: true, description: 'If "thick" remove version in name lib')
-            booleanParam(name: 'TransitiveDependencies', defaultValue: true, description: 'If "thick" all Transitive Dependencies  will include into library')
+            booleanParam(
+                name: 'TransitiveDependencies', defaultValue: true,
+                description: 'If "thick" all Transitive Dependencies  will include into library')
 
             //Properties for APP
             booleanParam(name: '[app]Debug.properties', defaultValue: false, description: '')
@@ -73,11 +76,20 @@ def call() {
         }
 
         stages {
-            stage("Reload JenkinsFile") {
+            stage('Reload JenkinsFile') {
+                agent {
+                    label 'Windows_Node'
+                }
+
+                options {
+                    timeout(time: 5, unit: 'MINUTES')
+                }
+
                 when {
-                    expression {
-                        return "${Refresh}" == "true"
-                    }
+                    equals expected: 'true', actual: "${Refresh}"
+                    // expression {
+                    //     return "${Refresh}" == 'true'
+                    // }
                 }
 
                 steps {
@@ -85,22 +97,32 @@ def call() {
                 }
             }
 
-            stage("Running Build") {
+            stage('Running Build') {
                 when {
                     expression {
-                        return "${Refresh}" == "false"
+                        return "${Refresh}" == 'false'
                     }
                 }
 
                 stages {
-                    stage("Clean Workspace") {
+                    stage('Clean Workspace') {
+                        agent {
+                            label 'Windows_Node'
+                        }
+
+                        options {
+                            timeout(time: 2, unit: 'MINUTES')
+                        }
+
                         steps {
                             dir(WORKSPACE) {
                                 script {
                                     cleanWs()
 
                                     println("URL Workspace: ${utilBCA.getURLWorkspace("$JOB_NAME")}")
-                                    utilBCA.createProjectProperties(projectName: "${PROJECT_NAME}", description: "${DESCRIPTION}")
+                                    utilBCA.createProjectProperties(
+                                        projectName: "${PROJECT_NAME}", description: "${DESCRIPTION}"
+                                        )
 
                                     writeDeploymentConfig()
                                 }
@@ -108,18 +130,26 @@ def call() {
                         }
                     }
 
-                    stage("Create Persistent Checklist") {
+                    stage('Create Persistent Checklist') {
+                        agent {
+                            label 'Windows_Node'
+                        }
+                        
+                        options {
+                            timeout(time: 5, unit: 'MINUTES')
+                        }
+
                         steps {
                             dir(WORKSPACE) {
                                 script {
                                     parallel(
-                                            "Deployment": {
+                                            'Deployment': {
                                                 writeFileDeployment()
                                             },
-                                            "Config APP": {
+                                            'Config APP': {
                                                 writeFileConfigAPP()
                                             },
-                                            "Config WEB": {
+                                            'Config WEB': {
                                                 writeFileConfigWEB()
                                             }
                                     )
@@ -128,7 +158,15 @@ def call() {
                         }
                     }
 
-                    stage("Check Parameter Checklist") {
+                    stage('Check Parameter Checklist') {
+                        agent {
+                            label 'Windows_Node'
+                        }
+
+                        options {
+                            timeout(time: 5, unit: 'MINUTES')
+                        }
+
                         steps {
                             dir(WORKSPACE) {
                                 script {
@@ -137,35 +175,23 @@ def call() {
                                             [dest: 'changes-config-app.txt', src: 'temp-changes-config-app.txt'],
                                             [dest: 'changes-config-web.txt', src: 'temp-changes-config-web.txt']
                                     ]
-                                    //Skipped since there's error exception occur
-                                    //cannot run program "nohup": CreateProcess error=2, The system cannot find the file specified
+
+                                    //if using labelledShell.. error occurs
+                                    //cannot run program "nohup": CreateProcess error=2,
+                                    //The system cannot find the file specified
                                     utilBCA.printEnvironment(changesFileConfig)
-
-                                    //Print env for windows
-                                    //echo bat(returnStdout: true, script: 'set')
-
-                                    /*PATH_PRINT_ENV = "var/printenv.txt"
-                                    bat label: 'PrintEnv', script:"""
-                                        del /s /q "\${PATH_PRINT_ENV}"
-                                        set >> "${PATH_PRINT_ENV}"
-                                        
-                                    """*/
                                 }
                             }
                         }
                     }
 
-                    stage("Copy Config n Libraries") {
+                    stage('Copy Config n Libraries') {
                         steps {
                             dir(WORKSPACE) {
                                 script {
                                     parallel(
-                                            "Config": {
-
-                                            },
-                                            "Library": {
-
-                                            }
+                                            'Config': { copyConfig() },
+                                            'Library': { }
                                     )
                                 }
                             }
@@ -211,8 +237,13 @@ def writeFileConfigWEB() {
 '''
 }
 
+def copyConfig() {
+    script {
+    }
+}
+
 def writeDeploymentConfig() {
-    writeFile file: 'var/deployment_descriptor.json', text: '''
+    writeFile(file: 'var/deployment_descriptor.json', text: '''
 {
           "paths": [
                         {
@@ -228,7 +259,7 @@ def writeDeploymentConfig() {
                             "path": "/bcaibank/app/kp3_ibank_inter12c_1/lib"
                         }
                     ]
-                }
+}
             ]
         },
         {
@@ -345,7 +376,7 @@ def writeDeploymentConfig() {
                     "id": "app_grha",
                     "nodes": ["APP/10.32.50.36-BCA3APP1"]
                 },
-                
+
                 {
                     "id": "web_mbca",
                     "nodes": ["WEB/10.16.42.129-BCA1WIBI02"]
@@ -523,5 +554,5 @@ def writeDeploymentConfig() {
         }
     ]
 }
-'''
+''')
 }
