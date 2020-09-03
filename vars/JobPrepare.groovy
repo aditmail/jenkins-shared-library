@@ -48,8 +48,8 @@ def call() {
 
             booleanParam(name: 'StripVersion', defaultValue: true, description: 'If "thick" remove version in name lib')
             booleanParam(
-                name: 'TransitiveDependencies', defaultValue: true,
-                description: 'If "thick" all Transitive Dependencies  will include into library')
+                    name: 'TransitiveDependencies', defaultValue: true,
+                    description: 'If "thick" all Transitive Dependencies  will include into library')
 
             //Properties for APP
             booleanParam(name: '[app]Debug.properties', defaultValue: false, description: '')
@@ -87,9 +87,6 @@ def call() {
 
                 when {
                     equals expected: 'true', actual: "${Refresh}"
-                    // expression {
-                    //     return "${Refresh}" == 'true'
-                    // }
                 }
 
                 steps {
@@ -99,9 +96,7 @@ def call() {
 
             stage('Running Build') {
                 when {
-                    expression {
-                        return "${Refresh}" == 'false'
-                    }
+                    equals expected: 'false', actual: "${Refresh}"
                 }
 
                 stages {
@@ -121,8 +116,8 @@ def call() {
 
                                     println("URL Workspace: ${utilBCA.getURLWorkspace("$JOB_NAME")}")
                                     utilBCA.createProjectProperties(
-                                        projectName: "${PROJECT_NAME}", description: "${DESCRIPTION}"
-                                        )
+                                            projectName: "${PROJECT_NAME}", description: "${DESCRIPTION}"
+                                    )
 
                                     writeDeploymentConfig()
                                 }
@@ -134,7 +129,7 @@ def call() {
                         agent {
                             label 'Windows_Node'
                         }
-                        
+
                         options {
                             timeout(time: 5, unit: 'MINUTES')
                         }
@@ -143,15 +138,9 @@ def call() {
                             dir(WORKSPACE) {
                                 script {
                                     parallel(
-                                            'Deployment': {
-                                                writeFileDeployment()
-                                            },
-                                            'Config APP': {
-                                                writeFileConfigAPP()
-                                            },
-                                            'Config WEB': {
-                                                writeFileConfigWEB()
-                                            }
+                                            'Deployment': { writeFileDeployment() },
+                                            'Config APP': { writeFileConfigAPP() },
+                                            'Config WEB': { writeFileConfigWEB() }
                                     )
                                 }
                             }
@@ -186,16 +175,52 @@ def call() {
                     }
 
                     stage('Copy Config n Libraries') {
+                        agent {
+                            label 'Windows_Node'
+                        }
+
+                        options {
+                            timeout(time: 5, unit: 'MINUTES')
+                        }
+
                         steps {
                             dir(WORKSPACE) {
                                 script {
                                     parallel(
-                                            'Config': { copyConfig() },
-                                            'Library': { }
+                                            'Config': { copyConfig() }
                                     )
                                 }
                             }
                         }
+                    }
+
+                    stage("Copy Deployment") {
+                        agent {
+                            label 'Windows_Node'
+                        }
+
+                        options {
+                            timeout(time: 5, unit: 'MINUTES')
+                        }
+
+                        steps {
+                            dir(WORKSPACE) {
+                                script {
+                                    bat label: 'Copy Deployment', script: """
+                                    java -cp "C:/WORK_BCA/generate local config/JenkinsLibs/GeneratorV2.jar" \
+                                    com.bca.jenkins.GeneratorV2.DeploymentGeneratorV2 \
+                                    -c "${WORKSPACE}/var/deployment_descriptor.json" \
+                                    -f "UAT"
+                                    -t "${WORKSPACE}/DEPLOY"
+                                    -u "PILOT"
+                                    -l "${WORKSPACE}/var/changes-deployment.txt" \
+                                    -v "node_web:${NODE_WEB}" \
+                                    -v "instance:${INSTANCE}"       
+                                    """
+                                }
+                            }
+                        }
+
                     }
                 }
             }
@@ -239,6 +264,23 @@ def writeFileConfigWEB() {
 
 def copyConfig() {
     script {
+        try {
+            utilBCA.writeChangeConfigV2(
+                    checklistFile: "C:/WORK_BCA/generate local config/APP-ConfigPropertiesV2/config_mapping/CHANGES.csv",
+                    toChangeCsv: 'var/changes-config-app.txt'
+            )
+
+            utilBCA.generateConfigV2(
+                    pathToConfig: "C:/WORK_BCA/generate local config/APP-ConfigPropertiesV2/PILOT-TEST",
+                    descriptorFileName: 'descriptor.json',
+                    flavor: 'PILOT',
+                    generateDestination: 'var/CONFIG/APP'
+            )
+        } catch (Exception ex) {
+            println("Exception $ex")
+            currentBuild.result = 'FAILURE'
+            currentBuild.description = "Error:: ${ex}"
+        }
     }
 }
 

@@ -138,3 +138,23 @@ def printEnvironment(changes = []) {
         println("Error: " + e.message.toString())
     }
 }
+
+def writeChangeConfigV2(Map path = [:]) {
+    bat label: 'WriteChangeConfigV2', script: """
+    java -cp "C:/WORK_BCA/generate local config/JenkinsLibs/GeneratorV2.jar" \
+        com.bca.jenkins.GeneratorV2.ChangesUpdater \
+        "${path.checklistFile}" \
+        "${path.toChangeCsv}"
+    """
+}
+
+def generateConfigV2(Map configs = [:]) {
+    bat label: 'GenereateChangeConfigV2', script: """
+    java -cp "C:/WORK_BCA/generate local config/JenkinsLibs/GeneratorV2.jar" \
+        com.bca.jenkins.GeneratorV2.ConfigGeneratorV2 \
+        "${configs.pathToConfig}" \
+        "${configs.descriptorFileName}" \
+        "${configs.flavor}" \
+        "${configs.generateDestination}" 
+    """
+}
