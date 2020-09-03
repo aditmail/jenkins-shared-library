@@ -2,10 +2,13 @@
 
 def call() {
     pipeline {
-        agent none
+        agent {
+            label 'Windows_Node'
+        }
 
         options {
             disableConcurrentBuilds()
+            timestamps()
         }
 
         tools {
@@ -77,16 +80,12 @@ def call() {
 
         stages {
             stage('Reload JenkinsFile') {
-                agent {
-                    label 'Windows_Node'
-                }
-
                 options {
-                    timeout(time: 5, unit: 'MINUTES')
+                    timeout(time: 2, unit: 'MINUTES')
                 }
 
                 when {
-                    equals expected: 'true', actual: "${Refresh}"
+                    equals(expected: 'true', actual: "${Refresh}")
                 }
 
                 steps {
@@ -96,15 +95,11 @@ def call() {
 
             stage('Running Build') {
                 when {
-                    equals expected: 'false', actual: "${Refresh}"
+                    equals(expected: 'false', actual: "${Refresh}")
                 }
 
                 stages {
                     stage('Clean Workspace') {
-                        agent {
-                            label 'Windows_Node'
-                        }
-
                         options {
                             timeout(time: 2, unit: 'MINUTES')
                         }
@@ -126,12 +121,8 @@ def call() {
                     }
 
                     stage('Create Persistent Checklist') {
-                        agent {
-                            label 'Windows_Node'
-                        }
-
                         options {
-                            timeout(time: 5, unit: 'MINUTES')
+                            timeout(time: 2, unit: 'MINUTES')
                         }
 
                         steps {
@@ -148,10 +139,6 @@ def call() {
                     }
 
                     stage('Check Parameter Checklist') {
-                        agent {
-                            label 'Windows_Node'
-                        }
-
                         options {
                             timeout(time: 5, unit: 'MINUTES')
                         }
@@ -164,10 +151,6 @@ def call() {
                                             [dest: 'changes-config-app.txt', src: 'temp-changes-config-app.txt'],
                                             [dest: 'changes-config-web.txt', src: 'temp-changes-config-web.txt']
                                     ]
-
-                                    //if using labelledShell.. error occurs
-                                    //cannot run program "nohup": CreateProcess error=2,
-                                    //The system cannot find the file specified
                                     utilBCA.printEnvironment(changesFileConfig)
                                 }
                             }
@@ -175,10 +158,6 @@ def call() {
                     }
 
                     stage('Copy Config n Libraries') {
-                        agent {
-                            label 'Windows_Node'
-                        }
-
                         options {
                             timeout(time: 5, unit: 'MINUTES')
                         }
@@ -195,10 +174,6 @@ def call() {
                     }
 
                     stage("Copy Deployment") {
-                        agent {
-                            label 'Windows_Node'
-                        }
-
                         options {
                             timeout(time: 5, unit: 'MINUTES')
                         }
@@ -269,7 +244,7 @@ def copyConfig() {
             )
 
             utilBCA.generateConfigV2(
-                    pathToConfig: "C:/WORK_BCA/generate local config/APP-ConfigPropertiesV2/PILOT-TEST",
+                    pathToConfig: "C:/WORK_BCA/generate local config/APP-ConfigPropertiesV2",
                     descriptorFileName: 'descriptor.json',
                     flavor: 'PILOT',
                     generateDestination: 'var/CONFIG/APP'
@@ -283,7 +258,7 @@ def copyConfig() {
 }
 
 def writeDeploymentConfig() {
-    writeFile(file: 'var/deployment_descriptor.json', text: '''
+    writeFile file: 'var/deployment_descriptor.json', text: '''
 {
           "paths": [
                         {
@@ -594,5 +569,5 @@ def writeDeploymentConfig() {
         }
     ]
 }
-''')
+'''
 }
