@@ -134,8 +134,8 @@ def printEnvironment(changes = []) {
             """*/
 
             bat label: "REadFileProperties BCA Model", script: """
-            java -cp "C:/WORK_BCA/generate local config/JenkinsLibs.JenkinsUtil.jar" \
-                com.bca.jenkins.util.RunFunc \
+            java -cp "C:/Users/Adit/Documents/CI-CD/jenkins/library/JenkinsLibs/JenkinsUtil.jar" \\
+                com.bca.jenkins.util.RunFunc \\
                 "ReadFileProperties" \
                 "${PATH_PRINT_ENV}" \
                 "var/${changes[i].dest}" \\
@@ -150,7 +150,7 @@ def printEnvironment(changes = []) {
 
 def writeChangeConfigV2(Map path = [:]) {
     bat label: 'WriteChangeConfigV2', script: """
-    java -cp "C:/WORK_BCA/generate local config/JenkinsLibs/GeneratorV2.jar" \
+    java -cp "C:/Users/Adit/Documents/CI-CD/jenkins/library/JenkinsLibs/GeneratorV2.jar" \
         com.bca.jenkins.GeneratorV2.ChangesUpdater \
         "${path.checklistFile}" \
         "${path.toChangeCsv}"
@@ -159,7 +159,7 @@ def writeChangeConfigV2(Map path = [:]) {
 
 def generateConfigV2(Map configs = [:]) {
     bat label: 'GenereateChangeConfigV2', script: """
-    java -cp "C:/WORK_BCA/generate local config/JenkinsLibs/GeneratorV2.jar" \
+    java -cp "C:/Users/Adit/Documents/CI-CD/jenkins/library/JenkinsLibs/GeneratorV2.jar" \
         com.bca.jenkins.GeneratorV2.ConfigGeneratorV2 \
         "${configs.pathToConfig}" \
         "${configs.descriptorFileName}" \
