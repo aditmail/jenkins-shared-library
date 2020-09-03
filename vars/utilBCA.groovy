@@ -138,8 +138,8 @@ def printEnvironment(changes = []) {
                 com.bca.jenkins.util.RunFunc \
                 "ReadFileProperties" \
                 "${PATH_PRINT_ENV}" \
-                "var/${changes[i].src}" \\
-                "var/${changes[i].dest}"
+                "var/${changes[i].dest}" \\
+                "var/${changes[i].src}"
             """
         }
     } catch (Exception e) {
