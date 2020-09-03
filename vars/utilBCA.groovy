@@ -134,7 +134,7 @@ def printEnvironment(changes = []) {
             """*/
 
             bat label: "ReadFileProperties BCA Model", script: """
-            java -cp "C:/Users/Adit/Documents/CI-CD/jenkins/library/JenkinsLibs/JenkinsUtil.jar" \\
+            java -cp "C:/Users/Adit/Documents/CI-CD/jenkins/library/JenkinsLibs/JenkinsUtil.jar" \
                 com.bca.jenkins.util.RunFunc \
                 "ReadFileProperties" \
                 "${PATH_PRINT_ENV}" \

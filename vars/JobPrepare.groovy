@@ -207,7 +207,7 @@ def call() {
                             dir(WORKSPACE) {
                                 script {
                                     bat label: 'Copy Deployment', script: """
-                                    java -cp "C:/WORK_BCA/generate local config/JenkinsLibs/GeneratorV2.jar" \
+                                    java -cp "C:/Users/Adit/Documents/CI-CD/jenkins/library/JenkinsLibs/GeneratorV2.jar" \
                                     com.bca.jenkins.GeneratorV2.DeploymentGeneratorV2 \
                                     -c "${WORKSPACE}/var/deployment_descriptor.json" \
                                     -f "UAT"
