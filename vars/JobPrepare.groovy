@@ -54,6 +54,9 @@ def call() {
                     name: 'TransitiveDependencies', defaultValue: true,
                     description: 'If "thick" all Transitive Dependencies  will include into library')
 
+            //Model Build
+            choice(choices: ['UAT', 'INTRA', 'INTER', 'PILOT', 'PRODUCTION'], description: 'Select Build Flavor', name: 'flavor')
+
             //Properties for APP
             booleanParam(name: '[app]Debug.properties', defaultValue: false, description: '')
             booleanParam(name: '[app]Debug_img.properties', defaultValue: false, description: '')
@@ -166,7 +169,7 @@ def call() {
                             dir(WORKSPACE) {
                                 script {
                                     parallel(
-                                            'Config': { copyConfig() }
+                                            'Config': { copyConfig("${flavor}") }
                                     )
                                 }
                             }
@@ -185,9 +188,9 @@ def call() {
                                     java -cp "C:/Users/Adit/Documents/CI-CD/jenkins/library/JenkinsLibs/GeneratorV2.jar" \
                                     com.bca.jenkins.GeneratorV2.DeploymentGeneratorV2 \
                                     -c "${WORKSPACE}/var/deployment_descriptor.json" \
-                                    -f "UAT"
-                                    -t "${WORKSPACE}/DEPLOY"
-                                    -u "PILOT"
+                                    -f "UAT" \
+                                    -t "${WORKSPACE}/DEPLOY" \
+                                    -u "${flavor}" \
                                     -l "${WORKSPACE}/var/changes-deployment.txt"       
                                     """
                                 }
@@ -235,7 +238,7 @@ def writeFileConfigWEB() {
 '''
 }
 
-def copyConfig() {
+def copyConfig(flavor = "") {
     script {
         try {
             utilBCA.writeChangeConfigV2(
@@ -246,8 +249,8 @@ def copyConfig() {
             utilBCA.generateConfigV2(
                     pathToConfig: "C:/WORK_BCA/generate local config/APP-ConfigPropertiesV2",
                     descriptorFileName: 'descriptor.json',
-                    flavor: 'PILOT',
-                    generateDestination: 'var/CONFIG/APP'
+                    flavor: "${flavor}",
+                    generateDestination: "${flavor}/CONFIG/APP"
             )
         } catch (Exception ex) {
             println("Exception $ex")
