@@ -125,12 +125,21 @@ def printEnvironment(changes = []) {
         for (int i = 0; i < changes.size(); i++) {
             //Running Java File..
             //Since we don't have access to it.. commented
-            bat label: "ReadFileProperties #${i}", script: """
+            /*bat label: "ReadFileProperties #${i}", script: """
                 java -jar "${EXECUTABLE}/library/jar/JenkinsUtils.jar" \
                 "ReadFileProperties" \
                 "${PATH_PRINT_ENV}" \
                 "var/${changes[i].src}" \
                 "var/${changes[i].dest}"  
+            """*/
+
+            bat label: "REadFileProperties BCA Model", script: """
+            java -cp "C:/WORK_BCA/generate local config/JenkinsLibs.JenkinsUtil.jar" \
+                com.bca.jenkins.util.RunFunc \
+                "ReadFileProperties" \
+                "${PATH_PRINT_ENV}" \
+                "var/${changes[i].src}" \\
+                "var/${changes[i].dest}"
             """
         }
     } catch (Exception e) {

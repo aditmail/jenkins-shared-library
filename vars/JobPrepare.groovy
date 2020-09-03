@@ -213,9 +213,7 @@ def call() {
                                     -f "UAT"
                                     -t "${WORKSPACE}/DEPLOY"
                                     -u "PILOT"
-                                    -l "${WORKSPACE}/var/changes-deployment.txt" \
-                                    -v "node_web:${NODE_WEB}" \
-                                    -v "instance:${INSTANCE}"       
+                                    -l "${WORKSPACE}/var/changes-deployment.txt"       
                                     """
                                 }
                             }
