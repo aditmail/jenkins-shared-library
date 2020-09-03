@@ -158,7 +158,7 @@ def writeChangeConfigV2(Map path = [:]) {
 }
 
 def generateConfigV2(Map configs = [:]) {
-    bat label: 'GenereateChangeConfigV2', script: """
+    bat label: 'GenerateChangeConfigV2', script: """
     java -cp "C:/Users/Adit/Documents/CI-CD/jenkins/library/JenkinsLibs/GeneratorV2.jar" \
         com.bca.jenkins.GeneratorV2.ConfigGeneratorV2 \
         "${configs.pathToConfig}" \

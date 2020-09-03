@@ -264,8 +264,8 @@ def copyConfig() {
     script {
         try {
             utilBCA.writeChangeConfigV2(
-                    checklistFile: "C:/WORK_BCA/generate local config/APP-ConfigPropertiesV2/config_mapping/CHANGES.csv",
-                    toChangeCsv: 'var/changes-config-app.txt'
+                    checklistFile: "var/changes-config-app.txt ",
+                    toChangeCsv: 'C:/WORK_BCA/generate local config/APP-ConfigPropertiesV2/config_mapping/CHANGES.csv'
             )
 
             utilBCA.generateConfigV2(
