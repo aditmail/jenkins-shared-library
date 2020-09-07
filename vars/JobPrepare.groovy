@@ -183,9 +183,14 @@ def call() {
 
                         steps{
                             dir(WORKSPACE){
-                                script{
-                                    bat label: 'Check Config Mapping APP', script: """
-                                    java -cp "C:/"
+                                script {
+                                    bat label: 'Copy Deployment', script: """
+                                    java -cp "C:/Users/Adit/Documents/CI-CD/jenkins/library/jar/JenkinsUtilities.jar" \
+                                    com.jenkins.util.checker.ConfigValidator \
+                                    "${flavor}" \
+                                    "${WORKSPACE}/PILOT/CONFIG/APP" \
+                                    "${WORKSPACE}/var/changes-config-app.txt" \
+                                    "${WORKSPACE}/var"       
                                     """
                                 }
                             }
@@ -201,12 +206,13 @@ def call() {
                             dir(WORKSPACE) {
                                 script {
                                     bat label: 'Copy Deployment', script: """
-                                    java -cp "C:/Users/Adit/Documents/CI-CD/jenkins/library/jar/JenkinsUtilities.jar" \
-                                    com.jenkins.util.checker.ConfigValidator \
-                                    "${flavor}" \
-                                    "${WORKSPACE}/PILOT/CONFIG/APP" \
-                                    "${WORKSPACE}/var/changes-config-app.txt" \
-                                    "${WORKSPACE}/var"       
+                                    java -cp "C:/Users/Adit/Documents/CI-CD/jenkins/library/JenkinsLibs/GeneratorV2.jar" \
+                                    com.bca.jenkins.GeneratorV2.DeploymentGeneratorV2 \
+                                    -c "${WORKSPACE}/var/deployment_descriptor.json" \
+                                    -f "UAT" \
+                                    -t "${WORKSPACE}/DEPLOY" \
+                                    -u "${flavor}" \
+                                    -l "${WORKSPACE}/var/changes-deployment.txt"       
                                     """
                                 }
                             }
