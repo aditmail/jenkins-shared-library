@@ -184,13 +184,15 @@ def call() {
                         steps{
                             dir(WORKSPACE){
                                 script {
-                                    bat label: 'Copy Deployment', script: """
+                                    //writeFile file: 'var/temp-changes-deployment.txt'
+
+                                    bat label: 'Validate Config Mapping', script: """
                                     java -cp "C:/Users/Adit/Documents/CI-CD/jenkins/library/jar/JenkinsUtilities.jar" \
                                     com.jenkins.util.checker.ConfigValidator \
                                     "${flavor}" \
                                     "${WORKSPACE}/PILOT/CONFIG/APP" \
                                     "${WORKSPACE}/var/changes-config-app.txt" \
-                                    "${WORKSPACE}/var"       
+                                    "var/"       
                                     """
                                 }
                             }
