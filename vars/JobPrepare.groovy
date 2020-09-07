@@ -190,8 +190,8 @@ def call() {
                                     java -cp "C:/Users/Adit/Documents/CI-CD/jenkins/library/jar/JenkinsUtilities.jar" \
                                     com.jenkins.util.checker.ConfigValidator \
                                     "${flavor}" \
-                                    "/${flavor}/CONFIG/APP" \
-                                    "/var/changes-config-app.txt" \
+                                    "${flavor}/CONFIG/APP" \
+                                    "var/changes-config-app.txt" \
                                     "var/"       
                                     """
                                 }
