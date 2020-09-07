@@ -191,8 +191,7 @@ def call() {
                                     com.jenkins.util.checker.ConfigValidator \
                                     "${flavor}" \
                                     "${flavor}/CONFIG/APP" \
-                                    "var/changes-config-app.txt" \
-                                    "var/"       
+                                    "var/changes-config-app.txt"
                                     """
                                 }
                             }
