@@ -176,6 +176,22 @@ def call() {
                         }
                     }
 
+                    stage('Validate Config Mapping'){
+                        options{
+                            timeout(time: 2, unit: 'MINUTES')
+                        }
+
+                        steps{
+                            dir(WORKSPACE){
+                                script{
+                                    bat label: 'Check Config Mapping APP', script: """
+                                    java -cp "C:/"
+                                    """
+                                }
+                            }
+                        }
+                    }
+
                     stage("Copy Deployment") {
                         options {
                             timeout(time: 5, unit: 'MINUTES')
@@ -185,13 +201,12 @@ def call() {
                             dir(WORKSPACE) {
                                 script {
                                     bat label: 'Copy Deployment', script: """
-                                    java -cp "C:/Users/Adit/Documents/CI-CD/jenkins/library/JenkinsLibs/GeneratorV2.jar" \
-                                    com.bca.jenkins.GeneratorV2.DeploymentGeneratorV2 \
-                                    -c "${WORKSPACE}/var/deployment_descriptor.json" \
-                                    -f "UAT" \
-                                    -t "${WORKSPACE}/DEPLOY" \
-                                    -u "${flavor}" \
-                                    -l "${WORKSPACE}/var/changes-deployment.txt"       
+                                    java -cp "C:/Users/Adit/Documents/CI-CD/jenkins/library/jar/JenkinsUtilities.jar" \
+                                    com.jenkins.util.checker.ConfigValidator \
+                                    "${flavor}" \
+                                    "${WORKSPACE}/PILOT/CONFIG/APP" \
+                                    "${WORKSPACE}/var/changes-config-app.txt" \
+                                    "${WORKSPACE}/var"       
                                     """
                                 }
                             }
@@ -263,7 +278,172 @@ def copyConfig(flavor = "") {
 def writeDeploymentConfig() {
     writeFile file: 'var/deployment_descriptor.json', text: '''
 {
-          "paths": [
+    "environments": [
+        {
+            "name": "UAT",
+            "node_groups": [
+                {
+                    "#": "Define the nodes",
+                    "id": "app",
+                    "nodes": ["APP/10.20.213.190_BCADAPPUAT6A", "APP/10.20.213.191_BCADAPPUAT6B"]
+                },
+                {
+                    "id": "web",
+                    "nodes": ["WEB/$node_web"]
+                }
+            ],
+
+            "deploy_paths":[
+                {
+                    "tag": "app_deployment",
+                    "paths": [
+                        {
+                            "node_id": "app",
+                            "path": "/bcaibank/app/ibank_uat_1/deployment/ibank12c_uat_1_cluster_$instance"
+                        }
+                    ]
+                },
+                {
+                    "tag": "lib_app",
+                    "paths": [
+                        {
+                            "node_id": "app",
+                            "path": "/bcaibank/app/ibank_uat_1/lib"
+                        }
+                    ]
+                },
+
+                {
+                    "tag": "web_deployment",
+                    "paths": [
+                        {
+                            "node_id": "web",
+                            "path": "/bcaibank/app/ibankweb_uat1/deployment/ibankweb12c_uat1_web_$instance"
+                        }
+                    ]
+                },
+                {
+                    "tag": "mklik_deployment",
+                    "paths": [
+                        {
+                            "node_id": "web",
+                            "path": "/bcaibank/app/ibankweb_uat1/deployment/ibankweb12c_uat1_mklik_$instance"
+                        }
+                    ]
+                },
+                {
+                    "tag": "lib_web",
+                    "paths": [
+                        {
+                            "node_id": "web",
+                            "path": "/bcaibank/app/ibankweb_uat1/lib"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "INTER",
+            "node_groups": [
+                {
+                    "id": "app_mbca",
+                    "nodes": [ "APP/10.16.50.32_BCA1APP1", "APP/10.16.50.33_BCA1APP4" ]
+                },
+                {
+                    "id": "app_wsa2",
+                    "nodes": [ "APP/10.0.50.36_BCA2APP1", "APP/10.0.50.37_BCA2APP4" ]
+                },
+                {
+                    "id": "app_grha",
+                    "nodes": [ "APP/10.32.50.36_BCA3APP1", "APP/10.32.50.37_BCA3APP4" ]
+                },
+
+                {
+                    "id": "web_mbca",
+                    "nodes": [ "WEB/10.16.42.128_BCA1WIBI01", "WEB/10.16.42.129_BCA1WIBI02" ]
+                },
+                {
+                    "id": "web_wsa2",
+                    "nodes": [ "WEB/10.0.42.128_BCA2WIBI01", "WEB/10.0.42.129_BCA2WIBI02" ]
+                },
+                {
+                    "id": "web_grha",
+                    "nodes": [ "WEB/10.32.42.128_BCA3WIBI01", "WEB/10.32.42.129_BCA3WIBI02" ]
+                }
+            ],
+            "deploy_paths":[
+                {
+                    "tag": "app_deployment",
+                    "paths": [
+                        {
+                            "node_id": "app_mbca",
+                            "path": "/bcaibank/app/kp1_ibank_inter12c_1/deployment/12.2.1"
+                        },
+                        {
+                            "node_id": "app_wsa2",
+                            "path": "/bcaibank/app/kp2_ibank_inter12c_1/deployment/12.2.1"
+                        },
+                        {
+                            "node_id": "app_grha",
+                            "path": "/bcaibank/app/kp3_ibank_inter12c_1/deployment/12.2.1"
+                        }
+                    ]
+                },
+                {
+                    "tag": "lib_app",
+                    "paths": [
+                        {
+                            "node_id": "app_mbca",
+                            "path": "/bcaibank/app/kp1_ibank_inter12c_1/lib"
+                        },
+                        {
+                            "node_id": "app_wsa2",
+                            "path": "/bcaibank/app/kp2_ibank_inter12c_1/lib"
+                        },
+                        {
+                            "node_id": "app_grha",
+                            "path": "/bcaibank/app/kp3_ibank_inter12c_1/lib"
+                        }
+                    ]
+                },
+
+                {
+                    "tag": "web_deployment",
+                    "paths": [
+                        {
+                            "node_id": "web_mbca",
+                            "path": "/bcaibank/app/kp1_ibank_inter12c_1/deployment/kp1_ibank_inter1/12.2.1"
+                        },
+                        {
+                            "node_id": "web_wsa2",
+                            "path": "/bcaibank/app/kp2_ibank_inter12c_1/deployment/kp2_ibank_inter1/12.2.1"
+                        },
+                        {
+                            "node_id": "web_grha",
+                            "path": "/bcaibank/app/kp3_ibank_inter12c_1/deployment/kp3_ibank_inter1/12.2.1"
+                        }
+                    ]
+                },
+                {
+                    "tag": "mklik_deployment",
+                    "paths": [
+                        {
+                            "node_id": "web_mbca",
+                            "path": "/bcaibank/app/kp1_ibank_inter12c_1/deployment/kp1_mklik_inter1/12.2.1"
+                        },
+                        {
+                            "node_id": "web_wsa2",
+                            "path": "/bcaibank/app/kp2_ibank_inter12c_1/deployment/kp2_mklik_inter1/12.2.1"
+                        },
+                        {
+                            "node_id": "web_grha",
+                            "path": "/bcaibank/app/kp3_ibank_inter12c_1/deployment/kp3_mklik_inter1/12.2.1"
+                        }
+                    ]
+                },
+                {
+                    "tag": "lib_web",
+                    "paths": [
                         {
                             "node_id": "web_mbca",
                             "path": "/bcaibank/app/kp1_ibank_inter12c_1/lib"
@@ -277,7 +457,7 @@ def writeDeploymentConfig() {
                             "path": "/bcaibank/app/kp3_ibank_inter12c_1/lib"
                         }
                     ]
-}
+                }
             ]
         },
         {
@@ -394,7 +574,7 @@ def writeDeploymentConfig() {
                     "id": "app_grha",
                     "nodes": ["APP/10.32.50.36-BCA3APP1"]
                 },
-
+                
                 {
                     "id": "web_mbca",
                     "nodes": ["WEB/10.16.42.129-BCA1WIBI02"]
