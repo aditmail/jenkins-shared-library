@@ -176,22 +176,20 @@ def call() {
                         }
                     }
 
-                    stage('Validate Config Mapping'){
-                        options{
+                    stage('Validate Config Mapping') {
+                        options {
                             timeout(time: 2, unit: 'MINUTES')
                         }
 
-                        steps{
-                            dir(WORKSPACE){
+                        steps {
+                            dir(WORKSPACE) {
                                 script {
-                                    //writeFile file: 'var/temp-changes-deployment.txt'
-
                                     bat label: 'Validate Config Mapping', script: """
                                     java -cp "C:/Users/Adit/Documents/CI-CD/jenkins/library/jar/JenkinsUtilities.jar" \
-                                    com.jenkins.util.checker.ConfigValidator \
-                                    "${flavor}" \
-                                    "${flavor}/CONFIG/APP" \
-                                    "var/changes-config-app.txt"
+                                        com.jenkins.util.checker.ConfigValidator \
+                                        "${flavor}" \
+                                        "${flavor}/CONFIG/APP" \
+                                        "var/changes-config-app.txt"
                                     """
                                 }
                             }
@@ -262,23 +260,47 @@ def writeFileConfigWEB() {
 
 def copyConfig(flavor = "") {
     script {
+        //APP CONFIG --->
         try {
             utilBCA.writeChangeConfigV2(
-                    checklistFile: "var/changes-config-app.txt ",
+                    checklistFile: "var/changes-config-app.txt",
                     toChangeCsv: 'C:/WORK_BCA/generate local config/APP-ConfigPropertiesV2/config_mapping/CHANGES.csv'
             )
 
             utilBCA.generateConfigV2(
-                    pathToConfig: "C:/WORK_BCA/generate local config/APP-ConfigPropertiesV2",
+                    pathToConfig: 'C:/WORK_BCA/generate local config/APP-ConfigPropertiesV2',
                     descriptorFileName: 'descriptor.json',
                     flavor: "${flavor}",
                     generateDestination: "${flavor}/CONFIG/APP"
             )
         } catch (Exception ex) {
             println("Exception $ex")
+            currentBuild.displayName = "#${BUILD_NUMBER} Failures (APP-ConfigPropertiesV2)"
             currentBuild.result = 'FAILURE'
             currentBuild.description = "Error:: ${ex}"
         }
+
+        //WEB CONFIG --->
+        try {
+            utilBCA.writeChangeConfigV2(
+                    checklistFile: 'var/changes-config-web.txt',
+                    toChangeCsv: 'C:/WORK_BCA/generate local config/WEB-ConfigPropertiesV2/config_mapping/CHANGES.csv'
+            )
+
+            utilBCA.generateConfigV2(
+                    pathToConfig: 'C:/WORK_BCA/generate local config/WEB-ConfigPropertiesV2',
+                    descriptorFileName: 'descriptor.json',
+                    flavor: "${flavor}",
+                    generateDestination:  "${flavor}/CONFIG/WEB"
+            )
+
+        } catch (Exception ex) {
+            println("Exception $ex")
+            currentBuild.displayName = "#${BUILD_NUMBER} Failures (WEB-ConfigPropertiesV2)"
+            currentBuild.result = 'FAILURE'
+            currentBuild.description = "Error:: ${ex}"
+        }
+
     }
 }
 
