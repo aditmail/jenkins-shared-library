@@ -300,7 +300,6 @@ def copyConfig(flavor = "") {
             currentBuild.result = 'FAILURE'
             currentBuild.description = "Error:: ${ex}"
         }
-
     }
 }
 
