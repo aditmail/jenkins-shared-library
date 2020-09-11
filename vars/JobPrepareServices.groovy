@@ -1,5 +1,4 @@
 #!/usr/bin/env groovy
-import javax.print.attribute.standard.JobName
 
 def call() {
     pipeline {
@@ -86,97 +85,97 @@ def call() {
 
             booleanParam(name: 'DEPLOY_APP', defaultValue: false, description: '')
         }
-    }
 
-    stages {
-        stage('Reload JenkinsFile') {
-            options {
-                timeout(time: 2, unit: 'MINUTES')
+        stages {
+            stage('Reload JenkinsFile') {
+                options {
+                    timeout(time: 2, unit: 'MINUTES')
+                }
+
+                when {
+                    equals(expected: 'true', actual: "${Refresh}")
+                }
+
+                steps {
+                    println("URL Workspace: ${utilBCA.getURLWorkspace("$JOB_NAME")}")
+                    println("Jenkinsfile Reloaded!")
+                }
             }
 
-            when {
-                equals(expected: 'true', actual: "${Refresh}")
-            }
+            stage('Running Build') {
+                when {
+                    equals(expected: 'false', actual: "${Refresh}")
+                }
 
-            steps {
-                println("URL Workspace: ${utilBCA.getURLWorkspace("$JOB_NAME")}")
-                println("Jenkinsfile Reloaded!")
-            }
-        }
+                stages {
+                    stage('Clean Workspace') {
+                        options {
+                            timeout(time: 2, unit: 'MINUTES')
+                        }
 
-        stage('Running Build') {
-            when {
-                equals(expected: 'false', actual: "${Refresh}")
-            }
+                        steps {
+                            dir(WORKSPACE) {
+                                script {
+                                    cleanWs()
 
-            stages {
-                stage('Clean Workspace') {
-                    options {
-                        timeout(time: 2, unit: 'MINUTES')
-                    }
+                                    println("URL Workspace: ${utilBCA.getURLWorkspace("$JOB_NAME")}")
+                                    utilBCA.createProjectProperties(
+                                            projectName: "${PROJECT_NAME}", description: "${DESCRIPTION}"
+                                    )
 
-                    steps {
-                        dir(WORKSPACE) {
-                            script {
-                                cleanWs()
-
-                                println("URL Workspace: ${utilBCA.getURLWorkspace("$JOB_NAME")}")
-                                utilBCA.createProjectProperties(
-                                        projectName: "${PROJECT_NAME}", description: "${DESCRIPTION}"
-                                )
-
-                                writeDeploymentConfig()
+                                    writeDeploymentConfig()
+                                }
                             }
                         }
                     }
-                }
 
-                stage('Create Persistent Checklist') {
-                    options {
-                        timeout(time: 2, unit: 'MINUTES')
-                    }
+                    stage('Create Persistent Checklist') {
+                        options {
+                            timeout(time: 2, unit: 'MINUTES')
+                        }
 
-                    steps {
-                        dir(WORKSPACE) {
-                            script {
-                                parallel(
-                                        'Deployment': { writeFileDeployment() },
-                                        'Config APP': { writeFileConfigAPP() }
-                                )
+                        steps {
+                            dir(WORKSPACE) {
+                                script {
+                                    parallel(
+                                            'Deployment': { writeFileDeployment() },
+                                            'Config APP': { writeFileConfigAPP() }
+                                    )
+                                }
                             }
                         }
                     }
-                }
 
-                stage('Check Parameter Checklist') {
-                    options {
-                        timeout(time: 5, unit: 'MINUTES')
-                    }
+                    stage('Check Parameter Checklist') {
+                        options {
+                            timeout(time: 5, unit: 'MINUTES')
+                        }
 
-                    steps {
-                        dir(WORKSPACE) {
-                            script {
-                                changesFileConfig = [
-                                        [dest: 'changes-deployment.txt', src: 'temp-changes-deployment.txt'],
-                                        [dest: 'changes-config-app.txt', src: 'temp-changes-config-app.txt']
-                                ]
-                                utilBCA.printEnvironment(changesFileConfig)
+                        steps {
+                            dir(WORKSPACE) {
+                                script {
+                                    changesFileConfig = [
+                                            [dest: 'changes-deployment.txt', src: 'temp-changes-deployment.txt'],
+                                            [dest: 'changes-config-app.txt', src: 'temp-changes-config-app.txt']
+                                    ]
+                                    utilBCA.printEnvironment(changesFileConfig)
+                                }
                             }
                         }
                     }
-                }
 
-                stage('Copy Config n Libraries') {
-                    options {
-                        timeout(time: 5, unit: 'MINUTES')
-                    }
+                    stage('Copy Config n Libraries') {
+                        options {
+                            timeout(time: 5, unit: 'MINUTES')
+                        }
 
-                    steps {
-                        dir(WORKSPACE) {
-                            script {
-                                parallel(
-                                        'Config': { copyConfig("${flavor}") }
-                                )
+                        steps {
+                            dir(WORKSPACE) {
+                                script {
+                                    parallel(
+                                            'Config': { copyConfig("${flavor}") }
+                                    )
+                                }
                             }
                         }
                     }
