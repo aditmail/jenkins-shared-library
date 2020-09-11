@@ -184,12 +184,22 @@ def call() {
                         steps {
                             dir(WORKSPACE) {
                                 script {
-                                    bat label: 'Validate Config Mapping', script: """
+                                    bat label: 'Validate Config Mapping APP', script: """
                                     java -cp "C:/Users/Adit/Documents/CI-CD/jenkins/library/jar/JenkinsUtilities.jar" \
                                         com.jenkins.util.checker.ConfigValidator \
                                         "${flavor}" \
+                                        'APP' \
                                         "${flavor}/CONFIG/APP" \
                                         "var/changes-config-app.txt"
+                                    """
+
+                                    bat label: 'Validate Config Mapping WEB', script: """
+                                    java -cp "C:/Users/Adit/Documents/CI-CD/jenkins/library/jar/JenkinsUtilities.jar" \
+                                        com.jenkins.util.checker.ConfigValidator \
+                                        "${flavor}" \
+                                        'WEB' \
+                                        "${flavor}/CONFIG/WEB" \
+                                        "var/changes-config-web.txt"
                                     """
                                 }
                             }
