@@ -188,7 +188,7 @@ def call() {
                                     java -cp "C:/Users/Adit/Documents/CI-CD/jenkins/library/jar/JenkinsUtilities.jar" \
                                         com.jenkins.util.checker.ConfigValidator \
                                         "${flavor}" \
-                                        'APP' \
+                                        "APP" \
                                         "${flavor}/CONFIG/APP" \
                                         "var/changes-config-app.txt"
                                     """
@@ -197,7 +197,7 @@ def call() {
                                     java -cp "C:/Users/Adit/Documents/CI-CD/jenkins/library/jar/JenkinsUtilities.jar" \
                                         com.jenkins.util.checker.ConfigValidator \
                                         "${flavor}" \
-                                        'WEB' \
+                                        "WEB" \
                                         "${flavor}/CONFIG/WEB" \
                                         "var/changes-config-web.txt"
                                     """
