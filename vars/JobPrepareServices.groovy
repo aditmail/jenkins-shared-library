@@ -221,7 +221,7 @@ def copyConfig(flavor = "") {
         //APP CONFIG 'JMS' --->
         try {
             utilBCA.writeChangeConfigV2(
-                    checklistFile: "var/changes-config-app-jms.txt",
+                    checklistFile: "var/changes-config-app.txt",
                     toChangeCsv: 'C:/WORK_BCA/generate local config/JMS-ConfigPropertiesV2/config_mapping/CHANGES.csv'
             )
 
@@ -241,7 +241,7 @@ def copyConfig(flavor = "") {
         //APP CONFIG - 'SVC' --->
         try {
             utilBCA.writeChangeConfigV2(
-                    checklistFile: 'var/changes-config-app-svc.txt',
+                    checklistFile: 'var/changes-config-app.txt',
                     toChangeCsv: 'C:/WORK_BCA/generate local config/SVC-ConfigPropertiesV2/config_mapping/CHANGES.csv'
             )
 
