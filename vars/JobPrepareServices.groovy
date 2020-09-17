@@ -199,6 +199,7 @@ def call() {
 
                                     bat label: 'Validate Config Mapping SVC', script: """
                                     java -cp "C:/Users/Adit/Documents/CI-CD/jenkins/library/jar/JenkinsUtilities.jar" \
+                                        -DreportModel="html" \
                                         com.jenkins.util.checker.ConfigValidator \
                                         "${APPLICATION}" \
                                         "${flavor}-SVC" \

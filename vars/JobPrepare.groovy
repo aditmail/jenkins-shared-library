@@ -186,6 +186,7 @@ def call() {
                                 script {
                                     bat label: 'Validate Config Mapping APP', script: """
                                     java -cp "C:/Users/Adit/Documents/CI-CD/jenkins/library/jar/JenkinsUtilities.jar" \
+                                        -DreportModel="html" \
                                         com.jenkins.util.checker.ConfigValidator \
                                         "${APPLICATION}" \
                                         "${flavor}-APP" \
@@ -196,6 +197,7 @@ def call() {
                                     bat label: 'Validate Config Mapping WEB', script: """
                                     java -cp "C:/Users/Adit/Documents/CI-CD/jenkins/library/jar/JenkinsUtilities.jar" \
                                         com.jenkins.util.checker.ConfigValidator \
+                                        -DreportModel="text" \
                                         "${APPLICATION}" \
                                         "${flavor}-WEB" \
                                         "${flavor}/CONFIG/WEB" \
