@@ -191,7 +191,7 @@ def call() {
                                         "${APPLICATION}" \
                                         "${flavor}-APP" \
                                         "${flavor}/CONFIG/APP" \
-                                        "${WORKSPACE}/var/changes-config-app.txt"
+                                        "var/changes-config-app.txt"
                                     """
 
                                     bat label: 'Validate Config Mapping WEB', script: """
@@ -201,7 +201,7 @@ def call() {
                                         "${APPLICATION}" \
                                         "${flavor}-WEB" \
                                         "${flavor}/CONFIG/WEB" \
-                                        "${WORKSPACE}/var/changes-config-web.txt"
+                                        "var/changes-config-web.txt"
                                     """
                                 }
                             }
