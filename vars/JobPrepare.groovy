@@ -191,7 +191,7 @@ def call() {
                                         "${APPLICATION}" \
                                         "${flavor}-APP" \
                                         "${flavor}/CONFIG/APP" \
-                                        "var/changes-config-app.txt"
+                                        "${WORKSPACE}/var/changes-config-app.txt"
                                     """
 
                                     bat label: 'Validate Config Mapping WEB', script: """
@@ -201,7 +201,7 @@ def call() {
                                         "${APPLICATION}" \
                                         "${flavor}-WEB" \
                                         "${flavor}/CONFIG/WEB" \
-                                        "var/changes-config-web.txt"
+                                        "${WORKSPACE}/var/changes-config-web.txt"
                                     """
                                 }
                             }
@@ -253,6 +253,7 @@ def writeFileConfigAPP() {
 [app]SMSMessages.properties
 [app]System.properties
 [app]EmailQueue.properties
+[app]EmailQueuesss.properties
 '''
 }
 
